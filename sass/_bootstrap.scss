@@ -1,11 +1,19 @@
-// Override bootstrap variables
-$font-family-sans-serif: "Noto Sans";
-$font-size-base: 1.1rem;
-$line-height-base: 1.4;
-$navbar-dark-color: rgba(white, 0.8) !default;
-$navbar-dark-hover-color: rgba(white, 0.9) !default;
-$primary: rgb(14, 108, 21);
-$enable-negative-margins: true;
+// // Override bootstrap variables
+// $font-family-sans-serif: "Noto Sans";
+// $font-size-base: 1.1rem;
+// $line-height-base: 1.4;
+// $navbar-dark-color: rgba(white, 0.8) !default;
+// $navbar-dark-hover-color: rgba(white, 0.9) !default;
+// $primary: #f5f5e9;
+// $enable-negative-margins: true;
+
+// Colors (base, for light theme)
+$color-primary: #f5f5e9;
+$color-secondary: #ff6f61;
+$color-success: #28a745;
+$color-background: #fffff3;
+$color-navbar: #5c5c5c;
+$color-text: #343a40;
 
 // Import bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
@@ -17,4 +25,17 @@ $enable-negative-margins: true;
 
 .container {
   max-width: 970px;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.navbar {
+  background-color: var(--navbar-color);
+}
+
+a {
+  color: var(--link-color);
 }

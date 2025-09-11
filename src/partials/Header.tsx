@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Container, Nav, Navbar, Form, Button } from "react-bootstrap";
 import routes from "../routes";
@@ -7,6 +7,17 @@ export default function Header() {
   // whether the navbar is expanded or not
   // (we use this to close it after a click/selection)
   const [expanded, setExpanded] = useState(false);
+
+  //set dark theme
+  const [isDark, setIsDark] = useState(false);
+
+  // applies theme to <html>
+  useEffect(() => {
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDark ? "dark" : "light"
+    );
+  }, [isDark]);
 
   //  get the current route
   const pathName = useLocation().pathname;
@@ -20,13 +31,7 @@ export default function Header() {
 
   return (
     <header>
-      <Navbar
-        expand="lg"
-        className="bg-body-tertiary"
-        expanded={expanded}
-        fixed="top"
-        data-bs-theme="dark"
-      >
+      <Navbar expand="lg" bg="primary" expanded={expanded} fixed="top">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Recipe vault
@@ -49,14 +54,24 @@ export default function Header() {
                     {menuLabel}
                   </Nav.Link>
                 ))}
+              {/* Search + Theme Toggle */}
               <Form className="d-flex">
                 <Form.Control
                   type="search"
-                  placeholder="Search"
+                  placeholder="Search recipe"
                   className="me-2"
                   aria-label="Search"
                 />
-                <Button variant="outline-success">Search</Button>
+                <Button variant="outline-dark" className="me-2">
+                  Search
+                </Button>
+
+                <Button
+                  variant="dark"
+                  onClick={() => setIsDark((prev) => !prev)}
+                >
+                  {isDark ? "Light Mode" : "Dark Mode"}
+                </Button>
               </Form>
             </Nav>
           </Navbar.Collapse>
