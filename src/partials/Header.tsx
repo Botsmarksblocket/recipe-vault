@@ -57,6 +57,7 @@ export default function Header() {
             </Nav>
 
             {/* Search + Theme Toggle */}
+
             <Form className="d-flex align-items-center">
               <Form.Control
                 type="search"
@@ -71,9 +72,10 @@ export default function Header() {
               <Form.Check
                 type="switch"
                 id="dark-mode-switch"
-                label={isDark ? "Dark Mode" : "Light Mode"}
+                label={isDark ? "Light Mode" : "Dark Mode"}
                 checked={isDark}
                 onClick={() => setIsDark((prev) => !prev)}
+                className="d-flex align-items-center"
               />
             </Form>
           </Navbar.Collapse>
