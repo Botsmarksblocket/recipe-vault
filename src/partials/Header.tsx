@@ -31,7 +31,7 @@ export default function Header() {
 
   return (
     <header>
-      <Navbar expand="lg" bg="primary" expanded={expanded} fixed="top">
+      <Navbar expand="lg" expanded={expanded} fixed="top">
         <Container>
           <Navbar.Brand as={Link} to="/">
             Recipe vault
@@ -54,26 +54,28 @@ export default function Header() {
                     {menuLabel}
                   </Nav.Link>
                 ))}
-              {/* Search + Theme Toggle */}
-              <Form className="d-flex">
-                <Form.Control
-                  type="search"
-                  placeholder="Search recipe"
-                  className="me-2"
-                  aria-label="Search"
-                />
-                <Button variant="outline-dark" className="me-2">
-                  Search
-                </Button>
-
-                <Button
-                  variant="dark"
-                  onClick={() => setIsDark((prev) => !prev)}
-                >
-                  {isDark ? "Light Mode" : "Dark Mode"}
-                </Button>
-              </Form>
             </Nav>
+
+            {/* Search + Theme Toggle */}
+            <Form className="d-flex align-items-center">
+              <Form.Control
+                type="search"
+                placeholder="Search recipe"
+                className="me-2"
+                aria-label="Search"
+              />
+              <Button size="sm" className="me-2">
+                Search
+              </Button>
+
+              <Form.Check
+                type="switch"
+                id="dark-mode-switch"
+                label={isDark ? "Dark Mode" : "Light Mode"}
+                checked={isDark}
+                onClick={() => setIsDark((prev) => !prev)}
+              />
+            </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>

@@ -7,14 +7,6 @@
 // $primary: #f5f5e9;
 // $enable-negative-margins: true;
 
-// Colors (base, for light theme)
-$color-primary: #f5f5e9;
-$color-secondary: #ff6f61;
-$color-success: #28a745;
-$color-background: #fffff3;
-$color-navbar: #5c5c5c;
-$color-text: #343a40;
-
 // Import bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
@@ -34,8 +26,17 @@ body {
 
 .navbar {
   background-color: var(--navbar-color);
+  color: var(--text-color);
 }
 
-a {
-  color: var(--link-color);
+.btn {
+  background-color: var(--button-color);
+  border-color: var(--button-color);
+  color: var(--text-color);
+}
+
+.btn-outline-dark {
+  background-color: var(--button-color);
+  border-color: var(--button-color);
+  color: var(--text-color);
 }
