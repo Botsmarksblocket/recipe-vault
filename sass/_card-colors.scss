@@ -1,4 +1,4 @@
-$ligher-card-color: rgb(240, 240, 240);
+$ligher-card-color: rgb(219, 238, 174);
 $darker-card-color: rgb(207, 226, 208);
 
 .card {
@@ -19,13 +19,13 @@ $darker-card-color: rgb(207, 226, 208);
 // - every other card, but alternately per 'row'
 // has a different color
 @media (min-width: 992px) {
-  [class^="col"]:nth-of-type(4n+2):has(.card) {
+  [class^="col"]:nth-of-type(4n + 2):has(.card) {
     .card {
       background-color: $darker-card-color;
     }
   }
 
-  [class^="col"]:nth-of-type(4n+3):has(.card) {
+  [class^="col"]:nth-of-type(4n + 3):has(.card) {
     .card {
       background-color: $darker-card-color;
     }
