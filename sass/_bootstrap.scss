@@ -1,4 +1,4 @@
-$primary: #5c5c5c;
+$primary: #208b59;
 $secondary: #ff6f61;
 $success: #28a745;
 $danger: #dc3545;
@@ -42,4 +42,7 @@ $warning: #ffc107;
 
 .card-background {
   background-color: var(--card-background-color);
+}
+.card-text, .card-title{
+    color: var(--text-color);
 }

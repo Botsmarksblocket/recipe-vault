@@ -26,7 +26,7 @@ export default function ProductDetailsPage() {
   return <article className="product-details">
     <Row>
       <Col>
-        <h2 className="text-primary">{name}</h2>
+        <h2>{name}</h2>
         <Image
           src={'/images/products/' + id + '.jpg'}
           alt={'Product image of the product ' + name + '.'}
@@ -36,7 +36,7 @@ export default function ProductDetailsPage() {
     </Row>
     <Row>
       <Col className="px-4 pb-4">
-        <Row className="p-3 bg-primary-subtle rounded">
+        <Row className="p-3 rounded">
           <Col className="pe-4 pe-sm-5 border-end border-primary">
             <strong>Quantity</strong>:
             <span
@@ -58,7 +58,7 @@ export default function ProductDetailsPage() {
     </Row >
     <Row>
       <Col>
-        <Link to="/" className="btn btn-primary float-end">
+        <Link to="/" className="btn  float-end">
           Back to the product list
         </Link>
       </Col>
