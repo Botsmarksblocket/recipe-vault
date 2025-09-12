@@ -1,4 +1,4 @@
-$primary: #5c5c5c;
+$primary: #1f8bacc5;
 $secondary: #ff6f61;
 $success: #28a745;
 $danger: #dc3545;
@@ -17,22 +17,35 @@ $warning: #ffc107;
   max-width: 970px;
 }
 
-body {
+// Gets updated with dark/light mode
+
+#root {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
 .navbar {
-  background-color: var(--navbar-color);
+  background-color: var(--navbar-color) !important;
+  --bs-navbar-color: var(--text-color);
+  --bs-navbar-hover-color: var(--text-color);
+  --bs-navbar-active-color: var(--text-color);
+  --bs-navbar-brand-color: var(--text-color);
+  --bs-navbar-brand-hover-color: var(--text-color);
+}
+
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+  opacity: 0.8;
+}
+
+.app-footer {
+  background-color: var(--footer-bg-color);
+}
+
+.card-background {
+  background-color: var(--card-background-color);
+}
+.card-text,
+.card-title {
   color: var(--text-color);
-}
-
-.btn {
-  background-color: var(--button-color);
-  border-color: var(--button-color);
-}
-
-.btn-outline-dark {
-  background-color: var(--button-color);
-  border-color: var(--button-color);
 }

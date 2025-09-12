@@ -1,23 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Container, Nav, Navbar, Form, Button } from "react-bootstrap";
+import { DarkModeToggle } from "../parts/DarkModeToggle";
 import routes from "../routes";
 
 export default function Header() {
   // whether the navbar is expanded or not
   // (we use this to close it after a click/selection)
   const [expanded, setExpanded] = useState(false);
-
-  //set dark theme
-  const [isDark, setIsDark] = useState(false);
-
-  // applies theme to <html>
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      isDark ? "dark" : "light"
-    );
-  }, [isDark]);
 
   //  get the current route
   const pathName = useLocation().pathname;
@@ -31,6 +21,7 @@ export default function Header() {
 
   return (
     <header>
+      how to open sqlite toolbox using Micr
       <Navbar expand="lg" expanded={expanded} fixed="top">
         <Container>
           <Navbar.Brand as={Link} to="/">
@@ -57,7 +48,6 @@ export default function Header() {
             </Nav>
 
             {/* Search + Theme Toggle */}
-
             <Form className="d-flex align-items-center">
               <Form.Control
                 type="search"
@@ -68,15 +58,7 @@ export default function Header() {
               <Button size="sm" className="me-2">
                 Search
               </Button>
-
-              <Form.Check
-                type="switch"
-                id="dark-mode-switch"
-                label={isDark ? "Light Mode" : "Dark Mode"}
-                checked={isDark}
-                onClick={() => setIsDark((prev) => !prev)}
-                className="d-flex align-items-center"
-              />
+              <DarkModeToggle />
             </Form>
           </Navbar.Collapse>
         </Container>

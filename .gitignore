@@ -4,6 +4,7 @@
 # if the live.db is missing the backend will create it
 # from template.db
 backend/databases/live.sqlite3
+backend/_db.sqlite3
 
 # Logs
 logs
@@ -33,3 +34,18 @@ dist-ssr
 # .NET build artifacts
 bin/
 obj/
+Debug/
+Release/
+TestResults/
+*.nupkg
+*.snupkg
+*.PublishSettings
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# OS 
+.DS_Store
+Thumbs.db
