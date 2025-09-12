@@ -1,4 +1,4 @@
-$primary: #208b59;
+$primary: #1f8bacc5;
 $secondary: #ff6f61;
 $success: #28a745;
 $danger: #dc3545;
@@ -16,6 +16,8 @@ $warning: #ffc107;
 .container {
   max-width: 970px;
 }
+
+// Gets updated with dark/light mode
 
 #root {
   background-color: var(--bg-color);
@@ -43,6 +45,7 @@ $warning: #ffc107;
 .card-background {
   background-color: var(--card-background-color);
 }
-.card-text, .card-title{
-    color: var(--text-color);
+.card-text,
+.card-title {
+  color: var(--text-color);
 }
