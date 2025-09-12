@@ -1,8 +1,10 @@
 // Light theme
 :root {
-  --bg-color: #fffff3;
-  --text-color: #343a40;
-  --navbar-color: #e3d5ca;
+  --bg-color: #F5F6F3;
+  --text-color: #333;
+  --navbar-color: #CADCAE;
+  --footer-bg-color: #CADCAE;
+  --card-background-color: #E3E9D3;
 }
 
 // Dark theme
@@ -10,4 +12,6 @@
   --bg-color: #1f1f1f;
   --text-color: #f5f5f5;
   --navbar-color: #2c2c2c;
+  --footer-bg-color: #2c2c2c;
+  --card-background-color: #f5ece7;
 }

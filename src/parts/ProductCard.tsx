@@ -13,7 +13,7 @@ export default function ProductCard({
   const navigate = useNavigate();
   return (
     <Card
-      className="mb-4 border-0"
+      className="mb-4 border-0 card-background"
       role="button" /*sets the cursor to pointer*/
       onClick={() => navigate("/products/" + slug)}
     >

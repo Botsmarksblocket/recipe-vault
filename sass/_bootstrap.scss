@@ -17,22 +17,29 @@ $warning: #ffc107;
   max-width: 970px;
 }
 
-body {
+#root {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
 .navbar {
-  background-color: var(--navbar-color);
-  color: var(--text-color);
+  background-color: var(--navbar-color) !important;
+  --bs-navbar-color: var(--text-color);
+  --bs-navbar-hover-color: var(--text-color);
+  --bs-navbar-active-color: var(--text-color);
+  --bs-navbar-brand-color: var(--text-color);
+  --bs-navbar-brand-hover-color: var(--text-color);
 }
 
-.btn {
-  background-color: var(--button-color);
-  border-color: var(--button-color);
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+  opacity: 0.8;
 }
 
-.btn-outline-dark {
-  background-color: var(--button-color);
-  border-color: var(--button-color);
+.app-footer {
+  background-color: var(--footer-bg-color);
+}
+
+.card-background {
+  background-color: var(--card-background-color);
 }
