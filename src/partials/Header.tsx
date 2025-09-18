@@ -51,16 +51,16 @@ export default function Header() {
               <Form.Control
                 type="search"
                 placeholder="Search recipe"
-                className="me-2"
+                className="me-3"
                 aria-label="Search"
               />
-              <Button size="sm" className="me-2">
+              <Button size="sm" className="me-3">
                 Search
               </Button>
             </Form>
             <div className="mt-2 mt-lg-0">
               <DarkModeToggle></DarkModeToggle>
-              <Button size="sm" className="ms-2">
+              <Button variant="success" size="sm" className="ms-3 ">
                 Log in
               </Button>
             </div>
