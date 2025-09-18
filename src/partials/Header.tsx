@@ -21,9 +21,8 @@ export default function Header() {
 
   return (
     <header>
-      how to open sqlite toolbox using Micr
       <Navbar expand="lg" expanded={expanded} fixed="top">
-        <Container>
+        <Container fluid>
           <Navbar.Brand as={Link} to="/">
             Recipe vault
           </Navbar.Brand>
@@ -47,7 +46,7 @@ export default function Header() {
                 ))}
             </Nav>
 
-            {/* Search + Theme Toggle */}
+            {/* Search */}
             <Form className="d-flex align-items-center">
               <Form.Control
                 type="search"
@@ -58,8 +57,13 @@ export default function Header() {
               <Button size="sm" className="me-2">
                 Search
               </Button>
-              <DarkModeToggle />
             </Form>
+            <div className="mt-2 mt-lg-0">
+              <DarkModeToggle></DarkModeToggle>
+              <Button size="sm" className="ms-2">
+                Log in
+              </Button>
+            </div>
           </Navbar.Collapse>
         </Container>
       </Navbar>
