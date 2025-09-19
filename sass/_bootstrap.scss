@@ -42,9 +42,10 @@ $warning: #ffc107;
   background-color: var(--footer-bg-color);
 }
 
-.card-background {
-  background-color: var(--card-background-color);
+.card {
+  background-color: var(--card-background-color) !important;
 }
+
 .card-text,
 .card-title {
   color: var(--text-color);
