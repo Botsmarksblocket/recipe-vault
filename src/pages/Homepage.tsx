@@ -3,7 +3,7 @@ import type Ingredient from "../interfaces/Ingredient";
 
 import "../components/RecipeCard.scss";
 
-import { Row, Col, Image, Card } from "react-bootstrap";
+import { Row, Col, Image, Card, Container } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 
 // import NotFoundPage from "./NotFoundPage";
@@ -51,13 +51,20 @@ export default function Homepage() {
             imagePath,
             instructions,
           }) => (
-            <Col key={id}>
+            <Col key={id} xs={12} sm={6} md={4} className="mb-3">
               <Card>
-                <Card.Body>
-                  <Card.Title className="card-title">{recipeName}</Card.Title>
+                <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                   {imagePath && (
-                    <Image src={`/recipe_images/${imagePath}`} rounded />
+                    <div className="card-image-wrapper">
+                      <Image
+                        className="card-image p-0"
+                        src={`/recipe_images/${imagePath}`}
+                        rounded
+                      />
+                    </div>
                   )}
+                  <Card.Title>{recipeName}</Card.Title>
+
                   <Card.Text>{description}</Card.Text>
                 </Card.Body>
               </Card>
