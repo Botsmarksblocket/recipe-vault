@@ -16,11 +16,26 @@ Homepage.route = {
 };
 
 export default function Homepage() {
-  const { recipes, ingredients }: {
-    recipes: Recipe[]; ingredients: Ingredient[];
+  const {
+    recipes,
+    ingredients,
+  }: {
+    recipes: Recipe[];
+    ingredients: Ingredient[];
   } = useLoaderData();
 
+  const recipesWithIngredients = recipes.map((recipe) => ({
+    ...recipe,
+    ingredients: ingredients.filter(({ recipesId }) => recipesId === recipe.id),
+  }));
 
-
-  return <></>;
+  return (
+    <>
+      <Row>
+        <Col>
+          <h2>Check out these recipes!</h2>
+        </Col>
+      </Row>
+    </>
+  );
 }
