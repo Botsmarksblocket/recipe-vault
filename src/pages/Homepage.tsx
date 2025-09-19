@@ -1,8 +1,11 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
+import "../components/RecipeCard.scss";
+
 import { Row, Col, Image, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
+
 // import NotFoundPage from "./NotFoundPage";
 
 Homepage.route = {
@@ -51,10 +54,10 @@ export default function Homepage() {
             <Col key={id}>
               <Card>
                 <Card.Body>
+                  <Card.Title className="card-title">{recipeName}</Card.Title>
                   {imagePath && (
                     <Image src={`/recipe_images/${imagePath}`} rounded />
                   )}
-                  <Card.Text>{recipeName}</Card.Text>
                   <Card.Text>{description}</Card.Text>
                 </Card.Body>
               </Card>
