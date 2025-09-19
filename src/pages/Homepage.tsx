@@ -1,14 +1,26 @@
-// import { Row, Col } from "react-bootstrap";
-// import { Link, useLoaderData } from "react-router-dom";
-// import NotFoundPage from "./NotFoundPage";
-import productsLoader from "../utils/productsLoader";
+import type Recipe from "../interfaces/Recipe";
+import type Ingredient from "../interfaces/Ingredient";
 
-ProductDetailsPage.route = {
-  path: "/products/:slug",
-  parent: "/",
-  loader: productsLoader,
+import { Row, Col } from "react-bootstrap";
+import { Link, useLoaderData } from "react-router-dom";
+// import NotFoundPage from "./NotFoundPage";
+
+Homepage.route = {
+  path: "/",
+  menuLabel: "About",
+  index: 1,
+  loader: async () => ({
+    recipes: await (await fetch("/api/recipes")).json(),
+    ingredients: await (await fetch("/api/ingredients")).json(),
+  }),
 };
 
-export default function ProductDetailsPage() {
+export default function Homepage() {
+  const { recipes, ingredients }: {
+    recipes: Recipe[]; ingredients: Ingredient[];
+  } = useLoaderData();
+
+
+
   return <></>;
 }
