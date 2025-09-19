@@ -1,13 +1,13 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Image } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 // import NotFoundPage from "./NotFoundPage";
 
 Homepage.route = {
   path: "/",
-  menuLabel: "About",
+  menuLabel: "Homepage",
   index: 1,
   loader: async () => ({
     recipes: await (await fetch("/api/recipes")).json(),
@@ -49,6 +49,7 @@ export default function Homepage() {
             instructions,
           }) => (
             <Col key={id}>
+              {imagePath && <Image src={`/recipe_images/${imagePath}`} />}
               <h3>{recipeName}</h3>
               <p>{description}</p>
             </Col>
