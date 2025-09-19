@@ -1,7 +1,7 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
-import { Row, Col, Image } from "react-bootstrap";
+import { Row, Col, Image, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 // import NotFoundPage from "./NotFoundPage";
 
@@ -49,9 +49,15 @@ export default function Homepage() {
             instructions,
           }) => (
             <Col key={id}>
-              {imagePath && <Image src={`/recipe_images/${imagePath}`} />}
-              <h3>{recipeName}</h3>
-              <p>{description}</p>
+              <Card>
+                <Card.Body>
+                  {imagePath && (
+                    <Image src={`/recipe_images/${imagePath}`} rounded />
+                  )}
+                  <Card.Text>{recipeName}</Card.Text>
+                  <Card.Text>{description}</Card.Text>
+                </Card.Body>
+              </Card>
             </Col>
           )
         )}
