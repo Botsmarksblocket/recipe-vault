@@ -36,6 +36,25 @@ export default function Homepage() {
           <h2>Check out these recipes!</h2>
         </Col>
       </Row>
+      <Row>
+        {recipesWithIngredients.map(
+          ({
+            id,
+            createdBy,
+            rating,
+            recipeName,
+            description,
+            votes,
+            imagePath,
+            instructions,
+          }) => (
+            <Col key={id}>
+              <h3>{recipeName}</h3>
+              <p>{description}</p>
+            </Col>
+          )
+        )}
+      </Row>
     </>
   );
 }
