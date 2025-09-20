@@ -1,15 +1,12 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { createSlug } from "../utils/slug";
-
 import ReactStars from "react-stars";
 
 import "../components/RecipeCard.scss";
 
-import { Row, Col, Card, CardGroup } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
-
-// import NotFoundPage from "./NotFoundPage";
 
 Homepage.route = {
   path: "/",
@@ -64,7 +61,7 @@ export default function Homepage() {
             imagePath,
           }) => (
             <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
-              <Link to={`/recipe/${createSlug(recipeName, id)}`}>
+              <Link to={`/recipe/${id}/${createSlug(recipeName)}`}>
                 <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
                   <Card.Body>
                     {imagePath && (

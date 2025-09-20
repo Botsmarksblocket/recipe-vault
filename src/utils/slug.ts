@@ -2,7 +2,7 @@ import slugify from "slugify";
 
 // Returns a URL-safe slug
 
-export function createSlug(name: string, id: number): string {
+export function createSlug(name: string): string {
   const safeSlug = slugify(name, {
     remove: undefined,
     replacement: "-",
@@ -10,5 +10,5 @@ export function createSlug(name: string, id: number): string {
     strict: true,
     trim: true,
   });
-  return `${safeSlug}-${id}`;
+  return `${safeSlug}`;
 }
