@@ -1,6 +1,8 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
+import ReactStars from "react-stars";
+
 import "../components/RecipeCard.scss";
 
 import { Row, Col, Card, CardGroup } from "react-bootstrap";
@@ -18,6 +20,14 @@ Homepage.route = {
   }),
 };
 
+function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+
+  let truncated = text.substring(0, maxLength);
+  truncated = truncated.substring(0, truncated.lastIndexOf(" "));
+  return truncated + " ...";
+}
+
 export default function Homepage() {
   const {
     recipes,
@@ -30,20 +40,30 @@ export default function Homepage() {
   const recipesWithIngredients = recipes.map((recipe) => ({
     ...recipe,
     ingredients: ingredients.filter(({ recipesId }) => recipesId === recipe.id),
+    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
   }));
 
   return (
     <>
       <Row>
         <Col>
-          <h2>Check out these recipes!</h2>
+          <h2 className="mx-3 mx-sm-0 mt-xs-0 mt-3">
+            Check out these recipes!
+          </h2>
         </Col>
       </Row>
       <Row>
         {recipesWithIngredients.map(
-          ({ id, rating, recipeName, votes, imagePath }) => (
-            <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3">
-              <Card>
+          ({
+            id,
+            averageRating,
+            recipeName,
+            description,
+            votes,
+            imagePath,
+          }) => (
+            <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
+              <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
                 <Card.Body>
                   {imagePath && (
                     <div className="card-image-wrapper">
@@ -53,9 +73,20 @@ export default function Homepage() {
                       />
                     </div>
                   )}
-                  <div className="card-overlay">
-                    <Card.Title>{recipeName}</Card.Title>
-                  </div>
+                  <Col className="d-flex align-items-center mt-2">
+                    <ReactStars
+                      count={5}
+                      value={averageRating}
+                      size={24}
+                      color1="#e4e5e9"
+                      color2="#ffc107"
+                      edit={false}
+                    />
+                    <Card.Text className="ms-2">({votes})</Card.Text>
+                  </Col>
+                  <Card.Title className="fw-bold fs-6">{recipeName}</Card.Title>
+
+                  <Card.Text>{truncateText(description, 100)}</Card.Text>
                 </Card.Body>
               </Card>
             </Col>
