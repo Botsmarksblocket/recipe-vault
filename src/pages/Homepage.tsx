@@ -1,6 +1,8 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
+import ReactStars from "react-stars";
+
 import "../components/RecipeCard.scss";
 
 import { Row, Col, Card, CardGroup } from "react-bootstrap";
@@ -61,8 +63,17 @@ export default function Homepage() {
                       />
                     </div>
                   )}
-                  <Card.Title>{recipeName}</Card.Title>
-
+                  <Card.Title className="mt-3 fw-bold">{recipeName}</Card.Title>
+                  <Col className="d-flex align-items-center">
+                    <ReactStars
+                      count={5}
+                      value={rating}
+                      size={24}
+                      color1="#e4e5e9"
+                      color2="#ffc107"
+                    />
+                    <Card.Text className="ms-2">({votes})</Card.Text>
+                  </Col>
                   <Card.Text>{truncateText(description, 100)}</Card.Text>
                 </Card.Body>
               </Card>
