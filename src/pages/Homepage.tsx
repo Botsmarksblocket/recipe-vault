@@ -47,7 +47,9 @@ export default function Homepage() {
     <>
       <Row>
         <Col>
-          <h2 className="mx-3 mx-sm-0">Check out these recipes!</h2>
+          <h2 className="mx-3 mx-sm-0 mt-xs-0 mt-3">
+            Check out these recipes!
+          </h2>
         </Col>
       </Row>
       <Row>
@@ -71,8 +73,7 @@ export default function Homepage() {
                       />
                     </div>
                   )}
-                  <Card.Title className="mt-3 fw-bold">{recipeName}</Card.Title>
-                  <Col className="d-flex align-items-center">
+                  <Col className="d-flex align-items-center mt-2">
                     <ReactStars
                       count={5}
                       value={averageRating}
@@ -83,6 +84,8 @@ export default function Homepage() {
                     />
                     <Card.Text className="ms-2">({votes})</Card.Text>
                   </Col>
+                  <Card.Title className="fw-bold fs-6">{recipeName}</Card.Title>
+
                   <Card.Text>{truncateText(description, 100)}</Card.Text>
                 </Card.Body>
               </Card>
