@@ -1,14 +1,12 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
-
+import { createSlug } from "../utils/slug";
 import ReactStars from "react-stars";
 
 import "../components/RecipeCard.scss";
 
-import { Row, Col, Card, CardGroup } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
-
-// import NotFoundPage from "./NotFoundPage";
 
 Homepage.route = {
   path: "/",
@@ -63,32 +61,36 @@ export default function Homepage() {
             imagePath,
           }) => (
             <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
-              <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
-                <Card.Body>
-                  {imagePath && (
-                    <div className="card-image-wrapper">
-                      <Card.Img
-                        src={`/recipe_images/${imagePath}`}
-                        alt="Recipe image"
+              <Link to={`/recipe/${id}/${createSlug(recipeName)}`}>
+                <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
+                  <Card.Body>
+                    {imagePath && (
+                      <div className="card-image-wrapper">
+                        <Card.Img
+                          src={`/recipe_images/${imagePath}`}
+                          alt="Recipe image"
+                        />
+                      </div>
+                    )}
+                    <Col className="d-flex align-items-center mt-2">
+                      <ReactStars
+                        count={5}
+                        value={averageRating}
+                        size={24}
+                        color1="#e4e5e9"
+                        color2="#ffc107"
+                        edit={false}
                       />
-                    </div>
-                  )}
-                  <Col className="d-flex align-items-center mt-2">
-                    <ReactStars
-                      count={5}
-                      value={averageRating}
-                      size={24}
-                      color1="#e4e5e9"
-                      color2="#ffc107"
-                      edit={false}
-                    />
-                    <Card.Text className="ms-2">({votes})</Card.Text>
-                  </Col>
-                  <Card.Title className="fw-bold fs-6">{recipeName}</Card.Title>
+                      <Card.Text className="ms-2">({votes})</Card.Text>
+                    </Col>
+                    <Card.Title className="fw-bold fs-6">
+                      {recipeName}
+                    </Card.Title>
 
-                  <Card.Text>{truncateText(description, 100)}</Card.Text>
-                </Card.Body>
-              </Card>
+                    <Card.Text>{truncateText(description, 100)}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Link>
             </Col>
           )
         )}

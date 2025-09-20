@@ -3,9 +3,10 @@ import { createElement } from "react";
 
 // page components
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import ProductDetailsPage from "./pages/Homepage.tsx";
+import HomePage from "./pages/Homepage.tsx";
+import RecipePage from "./pages/RecipePage.tsx";
 
-export default [NotFoundPage, ProductDetailsPage]
+export default [NotFoundPage, HomePage, RecipePage]
   // map the route property of each page component to a Route
   .map((x) => ({ element: createElement(x), ...x.route } as Route))
   // sort by index (and if an item has no index, sort as index 0)
