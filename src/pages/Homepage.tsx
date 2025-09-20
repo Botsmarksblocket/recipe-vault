@@ -40,6 +40,7 @@ export default function Homepage() {
   const recipesWithIngredients = recipes.map((recipe) => ({
     ...recipe,
     ingredients: ingredients.filter(({ recipesId }) => recipesId === recipe.id),
+    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
   }));
 
   return (
@@ -51,7 +52,14 @@ export default function Homepage() {
       </Row>
       <Row>
         {recipesWithIngredients.map(
-          ({ id, rating, recipeName, description, votes, imagePath }) => (
+          ({
+            id,
+            averageRating,
+            recipeName,
+            description,
+            votes,
+            imagePath,
+          }) => (
             <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
               <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
                 <Card.Body>
@@ -67,10 +75,11 @@ export default function Homepage() {
                   <Col className="d-flex align-items-center">
                     <ReactStars
                       count={5}
-                      value={rating}
+                      value={averageRating}
                       size={24}
                       color1="#e4e5e9"
                       color2="#ffc107"
+                      edit={false}
                     />
                     <Card.Text className="ms-2">({votes})</Card.Text>
                   </Col>
