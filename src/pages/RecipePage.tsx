@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
-import ReactStars from "react-stars";
+import StarRating from "../utils/reactStars";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
@@ -25,11 +25,58 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const recipeWithIngredients = {
-    ...recipe,
-    ingredients,
-    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
-  };
+  const { recipeName, description, imagePath, votes, sumRating, instructions } =
+    recipe;
+  const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
 
-  return <></>;
+  return (
+    <>
+      <Row>
+        <Col>
+          <Card className="mx-3">
+            <Card.Body className="pt-0 px-0">
+              <Row>
+                <Col xs={12} md={6} className="ps-4 pt-3">
+                  <Card.Title className="fw-bold fs-3 mt-0 mt-md-3">
+                    {recipeName}
+                  </Card.Title>
+                  <div className="d-flex align-items-center">
+                    <StarRating value={averageRating} />
+                    <Card.Text className="ms-2">({votes})</Card.Text>
+                  </div>
+                  <Card.Text>{description}</Card.Text>
+                </Col>
+
+                <Col xs={12} md={6}>
+                  {imagePath && (
+                    <div className="mt-3 mt-md-0">
+                      <Card.Img
+                        src={`/recipe_images/${imagePath}`}
+                        alt="Recipe image"
+                      />
+                    </div>
+                  )}
+                </Col>
+
+                <Col xs={12} md={6} className="ps-4">
+                  <Card.Text className="fs-2">Ingredienser</Card.Text>
+                  <ListGroup>
+                    {ingredients.map((ingredient) => (
+                      <ListGroup.Item key={ingredient.id}>
+                        {ingredient.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Col>
+                <Col xs={12} md={6} className="ps-4">
+                  <Card.Text className="fs-2">Instruktioner</Card.Text>
+                  <Card.Text>{instructions}</Card.Text>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
 }

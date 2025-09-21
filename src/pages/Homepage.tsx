@@ -1,16 +1,16 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { createSlug } from "../utils/slug";
-import ReactStars from "react-stars";
+import StarRating from "../utils/reactStars";
 
 import "../components/RecipeCard.scss";
 
 import { Row, Col, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 
-Homepage.route = {
+HomePage.route = {
   path: "/",
-  menuLabel: "Homepage",
+  menuLabel: "HomePage",
   index: 1,
   loader: async () => ({
     recipes: await (await fetch("/api/recipes")).json(),
@@ -26,7 +26,7 @@ function truncateText(text: string, maxLength: number): string {
   return truncated + " ...";
 }
 
-export default function Homepage() {
+export default function HomePage() {
   const {
     recipes,
     ingredients,
@@ -45,7 +45,7 @@ export default function Homepage() {
     <>
       <Row>
         <Col>
-          <h2 className="mx-3 mx-sm-0 mt-xs-0 mt-3">
+          <h2 className="mx-sm-0 mt-xs-0 mt-3">
             Check out these recipes!
           </h2>
         </Col>
@@ -61,8 +61,11 @@ export default function Homepage() {
             imagePath,
           }) => (
             <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
-              <Link to={`/recipe/${id}/${createSlug(recipeName)}`}>
-                <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/recipe/${id}/${createSlug(recipeName)}`}
+              >
+                <Card role="button" className="height h-100 w-100 mx-sm-0">
                   <Card.Body>
                     {imagePath && (
                       <div className="card-image-wrapper">
@@ -73,14 +76,8 @@ export default function Homepage() {
                       </div>
                     )}
                     <Col className="d-flex align-items-center mt-2">
-                      <ReactStars
-                        count={5}
-                        value={averageRating}
-                        size={24}
-                        color1="#e4e5e9"
-                        color2="#ffc107"
-                        edit={false}
-                      />
+                      <StarRating value={averageRating} />
+
                       <Card.Text className="ms-2">({votes})</Card.Text>
                     </Col>
                     <Card.Title className="fw-bold fs-6">

@@ -3,6 +3,7 @@ import Header from "./partials/Header";
 import Main from "./partials/Main";
 import Footer from "./partials/Footer";
 
+
 export default function App() {
   // scroll to top when the route changes
   useLocation();
