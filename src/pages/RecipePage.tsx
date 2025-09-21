@@ -2,7 +2,6 @@ import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
-import ReactStars from "react-stars";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
@@ -39,6 +38,7 @@ export default function RecipePage() {
             <Card.Body>
               <Row>
                 <Col xs={12} md={6}>
+                  <Card.Title className="fw-bold fs-3">{recipe.recipeName}</Card.Title>{" "}
                   <Card.Text>{recipe.description}</Card.Text>
                 </Col>
 
