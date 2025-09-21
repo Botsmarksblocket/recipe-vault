@@ -53,13 +53,12 @@ export default function RecipePage() {
                       <Card.Img
                         src={`/recipe_images/${imagePath}`}
                         alt="Recipe image"
-                        className="p-0"
                       />
                     </div>
                   )}
                 </Col>
 
-                <Col xs={12} md={6}>
+                <Col xs={12} md={6} className="ps-4">
                   <Card.Text className="fs-2">Ingredienser</Card.Text>
                   <ListGroup>
                     {ingredients.map((ingredient) => (
@@ -69,7 +68,7 @@ export default function RecipePage() {
                     ))}
                   </ListGroup>
                 </Col>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={6} className="ps-4">
                   <Card.Text className="fs-2">Instruktioner</Card.Text>
                   <Card.Text>{instructions}</Card.Text>
                 </Col>
