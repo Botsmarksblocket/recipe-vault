@@ -25,7 +25,8 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const { recipeName, description, imagePath, votes, sumRating } = recipe;
+  const { recipeName, description, imagePath, votes, sumRating, instructions } =
+    recipe;
   const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
 
   return (
@@ -33,10 +34,12 @@ export default function RecipePage() {
       <Row>
         <Col>
           <Card className="mx-3">
-            <Card.Body className="pt-0 pe-0 ps-0">
+            <Card.Body className="pt-0 px-0">
               <Row>
                 <Col xs={12} md={6} className="ps-4 pt-3">
-                  <Card.Title className="fw-bold fs-3">{recipeName}</Card.Title>
+                  <Card.Title className="fw-bold fs-3 mt-0 mt-md-3">
+                    {recipeName}
+                  </Card.Title>
                   <div className="d-flex align-items-center">
                     <StarRating value={averageRating} />
                     <Card.Text className="ms-2">({votes})</Card.Text>
@@ -54,6 +57,21 @@ export default function RecipePage() {
                       />
                     </div>
                   )}
+                </Col>
+
+                <Col xs={12} md={6}>
+                  <Card.Text className="fs-2">Ingredienser</Card.Text>
+                  <ListGroup>
+                    {ingredients.map((ingredient) => (
+                      <ListGroup.Item key={ingredient.id}>
+                        {ingredient.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Col>
+                <Col xs={12} md={6}>
+                  <Card.Text className="fs-2">Instruktioner</Card.Text>
+                  <Card.Text>{instructions}</Card.Text>
                 </Col>
               </Row>
             </Card.Body>

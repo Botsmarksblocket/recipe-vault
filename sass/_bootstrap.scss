@@ -50,3 +50,8 @@ $warning: #ffc107;
 .card-title {
   color: var(--text-color);
 }
+
+.list-group-item {
+  background-color: var(--navbar-color) !important;
+  color: var(--text-color);
+}
