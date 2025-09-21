@@ -31,5 +31,32 @@ export default function RecipePage() {
     averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
   };
 
-  return <></>;
+  return (
+    <>
+      <Row>
+        <Col>
+          <Card>
+            <Card.Body>
+              <Row>
+                <Col xs={12} md={6}>
+                  <Card.Text>{recipe.description}</Card.Text>
+                </Col>
+
+                <Col xs={12} md={6}>
+                  {recipe.imagePath && (
+                    <div className="card-image-wrapper">
+                      <Card.Img
+                        src={`/recipe_images/${recipe.imagePath}`}
+                        alt="Recipe image"
+                      />
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
 }
