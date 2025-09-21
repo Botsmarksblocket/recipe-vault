@@ -61,7 +61,10 @@ export default function HomePage() {
             imagePath,
           }) => (
             <Col key={id} xs={12} sm={6} md={4} lg={3} className="mb-3 d-flex">
-              <Link to={`/recipe/${id}/${createSlug(recipeName)}`}>
+              <Link
+                style={{ textDecoration: "none" }}
+                to={`/recipe/${id}/${createSlug(recipeName)}`}
+              >
                 <Card role="button" className="height h-100 w-100 mx-3 mx-sm-0">
                   <Card.Body>
                     {imagePath && (
