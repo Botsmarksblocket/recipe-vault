@@ -1,6 +1,7 @@
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { createSlug } from "../utils/slug";
+import StarRating from "../utils/reactStars";
 
 import "../components/RecipeCard.scss";
 
@@ -75,14 +76,8 @@ export default function HomePage() {
                       </div>
                     )}
                     <Col className="d-flex align-items-center mt-2">
-                      {/* <ReactStars
-                        count={5}
-                        value={averageRating}
-                        size={24}
-                        color1="#e4e5e9"
-                        color2="#ffc107"
-                        edit={false}
-                      /> */}
+                      <StarRating value={averageRating} />
+
                       <Card.Text className="ms-2">({votes})</Card.Text>
                     </Col>
                     <Card.Title className="fw-bold fs-6">

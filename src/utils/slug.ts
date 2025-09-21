@@ -10,6 +10,5 @@ export function createSlug(name: string): string {
     strict: true,
     trim: true,
   });
-  return;
-  `${safeSlug}`;
+  return `${safeSlug}`;
 }

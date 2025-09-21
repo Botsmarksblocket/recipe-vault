@@ -2,6 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
+import StarRating from "../utils/reactStars";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
@@ -24,11 +25,8 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const recipeWithIngredients = {
-    ...recipe,
-    ingredients,
-    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
-  };
+  const { recipeName, description, imagePath, votes, sumRating } = recipe;
+  const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
 
   return (
     <>
@@ -38,15 +36,22 @@ export default function RecipePage() {
             <Card.Body>
               <Row>
                 <Col xs={12} md={6}>
-                  <Card.Title className="fw-bold fs-3">{recipe.recipeName}</Card.Title>{" "}
-                  <Card.Text>{recipe.description}</Card.Text>
+                  <div className="d-flex align-items-center">
+                    <StarRating value={averageRating} />
+                    <Card.Text className="ms-2">({votes})</Card.Text>
+                  </div>
+
+                  <Card.Title className="fw-bold fs-3">
+                    {recipe.recipeName}
+                  </Card.Title>
+                  <Card.Text>{description}</Card.Text>
                 </Col>
 
                 <Col xs={12} md={6}>
                   {recipe.imagePath && (
                     <div className="card-image-wrapper">
                       <Card.Img
-                        src={`/recipe_images/${recipe.imagePath}`}
+                        src={`/recipe_images/${imagePath}`}
                         alt="Recipe image"
                       />
                     </div>
