@@ -21,7 +21,7 @@ const StarRating = ({
       count={count}
       size={size}
       edit={edit}
-      onChange = { onChange }
+      onChange={onChange}
     />
   );
 };

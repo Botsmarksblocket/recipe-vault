@@ -32,27 +32,25 @@ export default function RecipePage() {
     <>
       <Row>
         <Col>
-          <Card>
-            <Card.Body>
+          <Card className="mx-3">
+            <Card.Body className="pt-0 pe-0 ps-0">
               <Row>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={6} className="ps-4 pt-3">
+                  <Card.Title className="fw-bold fs-3">{recipeName}</Card.Title>
                   <div className="d-flex align-items-center">
                     <StarRating value={averageRating} />
                     <Card.Text className="ms-2">({votes})</Card.Text>
                   </div>
-
-                  <Card.Title className="fw-bold fs-3">
-                    {recipe.recipeName}
-                  </Card.Title>
                   <Card.Text>{description}</Card.Text>
                 </Col>
 
                 <Col xs={12} md={6}>
-                  {recipe.imagePath && (
-                    <div className="card-image-wrapper">
+                  {imagePath && (
+                    <div className="mt-3 mt-md-0">
                       <Card.Img
                         src={`/recipe_images/${imagePath}`}
                         alt="Recipe image"
+                        className="p-0"
                       />
                     </div>
                   )}
