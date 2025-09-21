@@ -8,9 +8,9 @@ import "../components/RecipeCard.scss";
 import { Row, Col, Card } from "react-bootstrap";
 import { Link, useLoaderData } from "react-router-dom";
 
-Homepage.route = {
+HomePage.route = {
   path: "/",
-  menuLabel: "Homepage",
+  menuLabel: "HomePage",
   index: 1,
   loader: async () => ({
     recipes: await (await fetch("/api/recipes")).json(),
@@ -26,7 +26,7 @@ function truncateText(text: string, maxLength: number): string {
   return truncated + " ...";
 }
 
-export default function Homepage() {
+export default function HomePage() {
   const {
     recipes,
     ingredients,
