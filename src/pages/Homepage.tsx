@@ -45,9 +45,9 @@ export default function HomePage() {
     <>
       <Row>
         <Col>
-          <h2 className="mx-sm-0 mt-xs-0 mt-3">
+          <h1 className="mx-sm-0 mt-xs-0 mt-3">
             Check out these recipes!
-          </h2>
+          </h1>
         </Col>
       </Row>
       <Row>
@@ -65,7 +65,7 @@ export default function HomePage() {
                 style={{ textDecoration: "none" }}
                 to={`/recipe/${id}/${createSlug(recipeName)}`}
               >
-                <Card role="button" className="height h-100 w-100 mx-sm-0">
+                <Card role="button" className="h-100 w-100 mx-sm-0">
                   <Card.Body>
                     {imagePath && (
                       <div className="card-image-wrapper">
