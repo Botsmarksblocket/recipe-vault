@@ -44,7 +44,7 @@ export default function RecipePage() {
                     <StarRating value={averageRating} />
                     <Card.Text className="ms-2">({votes})</Card.Text>
                   </div>
-                  <Card.Text className="mt-2">{description}</Card.Text>
+                  <Card.Text className="mt-2 mb-3">{description}</Card.Text>
                 </Col>
 
                 <Col xs={12} md={6}>
@@ -58,7 +58,7 @@ export default function RecipePage() {
                   )}
                 </Col>
 
-                <Col xs={12} md={6} className="ps-4">
+                <Col xs={12} md={6} className="ps-4 pe-4">
                   <Card.Text className="fs-2 mt-2">Ingredienser</Card.Text>
                   <ListGroup variant="flush">
                     {ingredients.map((ingredient) => (
@@ -74,8 +74,9 @@ export default function RecipePage() {
                     ))}
                   </ListGroup>
                 </Col>
-                <Col xs={12} md={6} className="ps-4">
+                <Col xs={12} md={6} className="d-flex flex-column ps-4 pe-4 ">
                   <Card.Text className="fs-2 mt-2">Instruktioner</Card.Text>
+
                   <Card.Text>{instructions}</Card.Text>
                 </Col>
               </Row>
