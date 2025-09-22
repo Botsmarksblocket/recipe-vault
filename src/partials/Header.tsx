@@ -60,9 +60,11 @@ export default function Header() {
             </Form>
             <div className="mt-2 mt-lg-0">
               <DarkModeToggle></DarkModeToggle>
-              <Button variant="success" size="sm" className="ms-3 ">
-                Log in
-              </Button>
+              <Link to={{ pathname: "login" }}>
+                <Button variant="success" size="sm" className="ms-3">
+                  Log in
+                </Button>
+              </Link>
             </div>
           </Navbar.Collapse>
         </Container>
