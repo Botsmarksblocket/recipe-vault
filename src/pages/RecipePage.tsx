@@ -33,18 +33,18 @@ export default function RecipePage() {
     <>
       <Row>
         <Col>
-          <Card className="mx-3">
+          <Card>
             <Card.Body className="pt-0 px-0">
               <Row>
                 <Col xs={12} md={6} className="ps-4 pt-3">
-                  <Card.Title className="fw-bold fs-3 mt-0 mt-md-3">
+                  <Card.Title className="fw-bold fs-2 mt-0 mt-md-3">
                     {recipeName}
                   </Card.Title>
                   <div className="d-flex align-items-center">
                     <StarRating value={averageRating} />
                     <Card.Text className="ms-2">({votes})</Card.Text>
                   </div>
-                  <Card.Text>{description}</Card.Text>
+                  <Card.Text className="mt-2 mb-3">{description}</Card.Text>
                 </Col>
 
                 <Col xs={12} md={6}>
@@ -58,18 +58,25 @@ export default function RecipePage() {
                   )}
                 </Col>
 
-                <Col xs={12} md={6} className="ps-4">
-                  <Card.Text className="fs-2">Ingredienser</Card.Text>
-                  <ListGroup>
+                <Col xs={12} md={6} className="ps-4 pe-4">
+                  <Card.Text className="fs-2 mt-2">Ingredienser</Card.Text>
+                  <ListGroup variant="flush">
                     {ingredients.map((ingredient) => (
-                      <ListGroup.Item key={ingredient.id}>
-                        {ingredient.name}
+                      <ListGroup.Item
+                        key={ingredient.id}
+                        className="mt-1 border-0 d-flex align-items-center"
+                      >
+                        <span className="me-2 fw-bold">
+                          {ingredient.amount}
+                        </span>
+                        <span> {ingredient.name}</span>
                       </ListGroup.Item>
                     ))}
                   </ListGroup>
                 </Col>
-                <Col xs={12} md={6} className="ps-4">
-                  <Card.Text className="fs-2">Instruktioner</Card.Text>
+                <Col xs={12} md={6} className="d-flex flex-column ps-4 pe-4 ">
+                  <Card.Text className="fs-2 mt-2">Instruktioner</Card.Text>
+
                   <Card.Text>{instructions}</Card.Text>
                 </Col>
               </Row>
