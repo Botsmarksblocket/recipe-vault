@@ -3,7 +3,7 @@ import { createElement } from "react";
 
 // page components
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import HomePage from "./pages/Homepage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 import RecipePage from "./pages/RecipePage.tsx";
 
 export default [NotFoundPage, HomePage, RecipePage]

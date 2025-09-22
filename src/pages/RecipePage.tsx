@@ -25,7 +25,7 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const { recipeName, description, imagePath, votes, sumRating, instructions } =
+  const { recipeName, description, imagePath, votes, instructions } =
     recipe;
   const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
 
