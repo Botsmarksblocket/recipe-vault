@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 LoginPage.route = {
   path: "/login",
@@ -15,8 +15,6 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [error, setError] = useState("");
-
   async function logOut() {
     await fetch("/api/login", {
       method: "DELETE",
@@ -24,6 +22,9 @@ export default function LoginPage() {
       body: JSON.stringify(user),
     });
   }
+
+  let navigate = useNavigate();
+  const [error, setError] = useState("");
 
   function setProperty(event: React.ChangeEvent) {
     const { name, value } = event.target as HTMLInputElement;
@@ -41,7 +42,9 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      <Link to="/"></Link>;
+      navigate(-1);
+    } else {
+      setError("Incorrect email or password.");
     }
   }
 
@@ -76,6 +79,7 @@ export default function LoginPage() {
                   <Form.Text className="text-danger">
                     Incorrect email or password.
                   </Form.Text>
+
                   <div className="d-grid gap-2">
                     <Button type="submit">Log in</Button>
                   </div>
