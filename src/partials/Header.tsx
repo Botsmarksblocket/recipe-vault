@@ -25,13 +25,13 @@ export default function Header() {
     <header>
       <Navbar expand="lg" expanded={expanded} fixed="top">
         <Container fluid>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand className="fs-2" as={Link} to="/">
             Recipe vault
           </Navbar.Brand>
 
           <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto fs-5">
               {routes
                 .filter((x) => x.menuLabel)
                 .map(({ menuLabel, path }, i) => (
@@ -47,8 +47,12 @@ export default function Header() {
                   </Nav.Link>
                 ))}
             </Nav>
-
             {/* Search */}
+            {user && (
+              <h3 className="me-4 d-none d-lg-block">
+                Welcome {user?.firstName}
+              </h3>
+            )}
             <Form className="d-flex align-items-center">
               <Form.Control
                 type="search"
