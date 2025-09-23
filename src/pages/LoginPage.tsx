@@ -18,7 +18,7 @@ export default function LoginPage() {
   // --- Hooks (state, navigation) ---
   const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { loginUser } = useAuth();
+  const { loginUser, logoutUser } = useAuth();
   const navigate = useNavigate();
 
   // --- Handlers ---
@@ -37,14 +37,6 @@ export default function LoginPage() {
     } else {
       setError("Incorrect email or password.");
     }
-  }
-
-  async function logOut() {
-    await fetch("/api/login", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formUser),
-    });
   }
 
   return (
@@ -85,7 +77,7 @@ export default function LoginPage() {
                 </Form.Group>
               </Form>
               <div className="d-grid gap-2 mt-5">
-                <Button variant="danger" onClick={logOut}>
+                <Button variant="danger" onClick={logoutUser}>
                   Log out
                 </Button>
               </div>

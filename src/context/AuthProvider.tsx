@@ -10,6 +10,7 @@ import type User from "../interfaces/User";
 interface AuthContextType {
   user: User | null;
   loginUser: (email: string, password: string) => Promise<boolean>;
+  logoutUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,6 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const logoutUser = async () => {
+    await fetch("/api/login", { method: "DELETE" });
+    setUser(null);
+  };
+
   //Fetches user on first render
   useEffect(() => {
     fetchUser().finally(() => setLoading(false));
@@ -70,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   //Return context provider
   return (
-    <AuthContext.Provider value={{ user, loginUser }}>
+    <AuthContext.Provider value={{ user, loginUser, logoutUser }}>
       {children}
     </AuthContext.Provider>
   );
