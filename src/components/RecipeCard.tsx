@@ -5,17 +5,13 @@ import StarRating from "../utils/reactStars";
 import { createSlug } from "../utils/slug";
 import "../components/RecipeCard.scss";
 
-interface RecipeCardProps {
-  recipe: Recipe;
-}
-
 function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   const truncated = text.substring(0, maxLength);
   return truncated.substring(0, truncated.lastIndexOf(" ")) + " ...";
 }
 
-export default function RecipeCard({ recipe }: RecipeCardProps) {
+export default function RecipeCard({ recipe }: { recipe: Recipe }) {
   const { id, recipeName, description, votes, sumRating, imagePath } = recipe;
   const averageRating = votes > 0 ? sumRating / votes : 0;
 
