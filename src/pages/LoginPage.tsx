@@ -1,33 +1,27 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
+// Route metadata
 LoginPage.route = {
   path: "/login",
 };
+
 export default function LoginPage() {
+  // --- Types ---
   interface User {
     email: string;
     password: string;
   }
-  const [user, setUser] = useState<User>({
-    email: "",
-    password: "",
-  });
 
+  // --- Hooks (state, navigation) ---
+  const [user, setUser] = useState<User>({ email: "", password: "" });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  async function logOut() {
-    await fetch("/api/login", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    });
-  }
-
-  function setProperty(event: React.ChangeEvent) {
-    const { name, value } = event.target as HTMLInputElement;
-
+  // --- Handlers ---
+  function setProperty(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
     setUser({ ...user, [name]: value });
   }
 
@@ -41,8 +35,18 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      <Link to="/"></Link>;
+      navigate(-1); // go back to previous page
+    } else {
+      setError("Incorrect email or password.");
     }
+  }
+
+  async function logOut() {
+    await fetch("/api/login", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    });
   }
 
   return (
@@ -73,9 +77,10 @@ export default function LoginPage() {
                     placeholder="Enter password..."
                   ></Form.Control>
 
-                  <Form.Text className="text-danger">
-                    Incorrect email or password.
-                  </Form.Text>
+                  <div className="mt-2 mb-2">
+                    <Form.Text className="text-danger">{error}</Form.Text>
+                  </div>
+
                   <div className="d-grid gap-2">
                     <Button type="submit">Log in</Button>
                   </div>
