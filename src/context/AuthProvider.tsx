@@ -26,7 +26,6 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchUser = async () => {
     const response = await fetch("/api/login");
@@ -56,7 +55,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await fetchUser();
         return true;
       } else {
-        setError("Incorrect email or password.");
         return false;
       }
     } catch (error) {
