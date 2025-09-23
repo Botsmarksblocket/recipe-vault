@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Container, Nav, Navbar, Form, Button } from "react-bootstrap";
 import { DarkModeToggle } from "../parts/DarkModeToggle";
+import { useAuth } from "../context/AuthProvider";
 import routes from "../routes";
 
 export default function Header() {
   // whether the navbar is expanded or not
   // (we use this to close it after a click/selection)
   const [expanded, setExpanded] = useState(false);
+  const { user, logoutUser } = useAuth();
 
   //  get the current route
   const pathName = useLocation().pathname;
@@ -59,12 +61,23 @@ export default function Header() {
               </Button>
             </Form>
             <div className="mt-2 mt-lg-0">
-              <DarkModeToggle></DarkModeToggle>
-              <Link to={{ pathname: "login" }}>
-                <Button variant="success" size="sm" className="ms-3">
-                  Log in
+              <DarkModeToggle />
+              {user ? (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="ms-3"
+                  onClick={logoutUser}
+                >
+                  Log out
                 </Button>
-              </Link>
+              ) : (
+                <Link to={{ pathname: "login" }}>
+                  <Button variant="success" size="sm" className="ms-3">
+                    Log in
+                  </Button>
+                </Link>
+              )}
             </div>
           </Navbar.Collapse>
         </Container>
