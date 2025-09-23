@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
+import { useAuth } from "../context/AuthProvider";
 
 // Route metadata
 LoginPage.route = {
@@ -9,32 +10,29 @@ LoginPage.route = {
 
 export default function LoginPage() {
   // --- Types ---
-  interface User {
+  interface UserForm {
     email: string;
     password: string;
   }
 
   // --- Hooks (state, navigation) ---
-  const [user, setUser] = useState<User>({ email: "", password: "" });
+  const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
 
   // --- Handlers ---
   function setProperty(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...formUser, [name]: value });
   }
 
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    });
+    const success = await loginUser(formUser.email, formUser.password);
 
-    if (response.ok) {
+    if (success) {
       navigate(-1); // go back to previous page
     } else {
       setError("Incorrect email or password.");
@@ -45,7 +43,7 @@ export default function LoginPage() {
     await fetch("/api/login", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
+      body: JSON.stringify(formUser),
     });
   }
 
