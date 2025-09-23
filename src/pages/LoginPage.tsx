@@ -18,7 +18,7 @@ export default function LoginPage() {
   // --- Hooks (state, navigation) ---
   const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { loginUser, logoutUser } = useAuth();
+  const { loginUser, logoutUser, loading } = useAuth();
   const navigate = useNavigate();
 
   // --- Handlers ---
@@ -72,7 +72,9 @@ export default function LoginPage() {
                   </div>
 
                   <div className="d-grid gap-2">
-                    <Button type="submit">Log in</Button>
+                    <Button type="submit" disabled={loading}>
+                      Log in
+                    </Button>
                   </div>
                 </Form.Group>
               </Form>
