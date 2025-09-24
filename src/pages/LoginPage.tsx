@@ -78,11 +78,6 @@ export default function LoginPage() {
                   </div>
                 </Form.Group>
               </Form>
-              <div className="d-grid gap-2 mt-5">
-                <Button variant="danger" onClick={logoutUser}>
-                  Log out
-                </Button>
-              </div>
             </Card.Body>
           </Card>
         </Col>
