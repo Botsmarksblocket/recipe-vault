@@ -55,6 +55,7 @@ export default function LoginPage() {
                     name="email"
                     placeholder="Enter email..."
                     className="d-block mt-2"
+                    required
                   ></Form.Control>
                 </Form.Group>
                 <Form.Group>
@@ -65,6 +66,7 @@ export default function LoginPage() {
                     name="password"
                     className="mt-2"
                     placeholder="Enter password..."
+                    required
                   ></Form.Control>
 
                   <div className="mt-2 mb-2">

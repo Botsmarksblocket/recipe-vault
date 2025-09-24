@@ -10,8 +10,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    // optional: show spinner while checking session
-    return <p>Loading...</p>;
+    return;
   }
 
   if (!user) {
