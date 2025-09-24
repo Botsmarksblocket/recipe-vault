@@ -1,26 +1,26 @@
 import type Recipe from "../interfaces/Recipe";
-import type Ingredient from "../interfaces/Ingredient";
 import RecipeCard from "../components/RecipeCard";
+import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { useLoaderData } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 UsersRecipesPage.route = {
   path: "/my-recipes",
   menuLabel: "My recipes",
   index: 1,
   requiresAuth: true,
-  loader: async () => ({
-    recipes: await (await fetch("/api/recipes")).json(),
-  }),
 };
 
 export default function UsersRecipesPage() {
-  const {
-    recipes,
-  }: {
-    recipes: Recipe[];
-    ingredients: Ingredient[];
-  } = useLoaderData();
+  const { user } = useAuth();
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/recipes/?where=createdBy=${user.id}`)
+      .then((res) => res.json())
+      .then((data) => setRecipes(data));
+  }, [user]);
 
   const recipesWithRating = recipes.map((recipe) => ({
     ...recipe,
@@ -31,7 +31,7 @@ export default function UsersRecipesPage() {
     <>
       <Row>
         <Col>
-          <h1 className="mx-sm-0 mt-xs-0 mt-3">Check out these recipes!</h1>
+          <h1 className="mx-sm-0 mt-xs-0 mt-3">Your recipes</h1>
         </Col>
       </Row>
       <Row>
