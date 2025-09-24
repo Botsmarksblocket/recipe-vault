@@ -18,7 +18,7 @@ export default function LoginPage() {
   // --- Hooks (state, navigation) ---
   const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { loginUser, logoutUser, loading } = useAuth();
+  const { loginUser, loading } = useAuth();
   const navigate = useNavigate();
 
   // --- Handlers ---
@@ -78,11 +78,6 @@ export default function LoginPage() {
                   </div>
                 </Form.Group>
               </Form>
-              <div className="d-grid gap-2 mt-5">
-                <Button variant="danger" onClick={logoutUser}>
-                  Log out
-                </Button>
-              </div>
             </Card.Body>
           </Card>
         </Col>

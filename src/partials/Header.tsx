@@ -33,7 +33,7 @@ export default function Header() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto fs-5">
               {routes
-                .filter((x) => x.menuLabel)
+                .filter((x) => x.menuLabel && (!x.requiresAuth || user))
                 .map(({ menuLabel, path }, i) => (
                   <Nav.Link
                     as={Link}
