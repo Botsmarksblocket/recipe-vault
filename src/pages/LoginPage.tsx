@@ -18,7 +18,7 @@ export default function LoginPage() {
   // --- Hooks (state, navigation) ---
   const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { loginUser, logoutUser, loading } = useAuth();
+  const { loginUser, loading } = useAuth();
   const navigate = useNavigate();
 
   // --- Handlers ---
