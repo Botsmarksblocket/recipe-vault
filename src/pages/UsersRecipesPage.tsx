@@ -1,7 +1,7 @@
 import type Recipe from "../interfaces/Recipe";
 import RecipeCard from "../components/RecipeCard";
 import { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 
 UsersRecipesPage.route = {
@@ -36,7 +36,22 @@ export default function UsersRecipesPage() {
       </Row>
       <Row>
         {recipesWithRating.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+          <Col
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            key={recipe.id}
+            className="d-flex flex-column mb-3"
+          >
+            {/* Only the card stretches */}
+            <div className="flex-grow-1">
+              <RecipeCard recipe={recipe} />
+            </div>
+
+            {/* Button sits below, full width */}
+            <Button className="mt-2 w-100">Edit</Button>
+          </Col>
         ))}
       </Row>
     </>
