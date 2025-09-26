@@ -1,8 +1,8 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
-import type Ingredient from "../interfaces/Ingredient";
-import { createSlug } from "../utils/slug";
+// import type Ingredient from "../interfaces/Ingredient";
+// import { createSlug } from "../utils/slug";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -49,8 +49,10 @@ export default function CreateRecipePage() {
       body: JSON.stringify(payload),
     });
 
-    if (file) {
+
+    if (file) {      
       const formData = new FormData();
+      // Prepares file and filename to be sent as form data under the key "image"
       formData.append("image", file, fileName);
 
       await fetch("api/upload", {

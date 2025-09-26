@@ -25,8 +25,7 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const { recipeName, description, imagePath, votes, instructions } =
-    recipe;
+  const { recipeName, description, imagePath, votes, instructions } = recipe;
   const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
 
   return (
@@ -50,8 +49,9 @@ export default function RecipePage() {
                 <Col xs={12} md={6}>
                   {imagePath && (
                     <div className="mt-3 mt-md-0">
+                      {/* TODO Update src for production */}
                       <Card.Img
-                        src={`/recipe_images/${imagePath}`}
+                        src={`/backend/wwwroot/uploads/${imagePath}`}
                         alt="Recipe image"
                       />
                     </div>
