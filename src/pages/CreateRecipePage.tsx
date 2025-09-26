@@ -1,5 +1,6 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
+import { v4 as uuidv4 } from "uuid";
 import type Ingredient from "../interfaces/Ingredient";
 import { createSlug } from "../utils/slug";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,8 @@ CreateRecipePage.route = {
 
 export default function CreateRecipePage() {
   const { user } = useAuth();
-  console.log(user);
+  const navigate = useNavigate();
+  const [file, setFile] = useState<File | null>(null);
 
   const [recipe, setRecipe] = useState({
     createdBy: user?.id,
@@ -31,19 +33,33 @@ export default function CreateRecipePage() {
     setRecipe({ ...recipe, [name]: value });
   }
 
-  const navigate = useNavigate();
-
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
 
-    const payload: any = { ...recipe };
+    // Generates a filename
+    let fileName;
+    const extension = file?.name.split(".").pop();
+    fileName = `${uuidv4}.${extension}`;
+
+    const payload: any = { ...recipe, imagePath: fileName };
 
     await fetch("api/recipes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    navigate(`/recipe/${user?.id}/${createSlug(payload.recipeName)}`);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file, fileName);
+
+      await fetch("api/upload", {
+        method: "POST",
+        body: formData,
+      });
+    }
+
+    navigate("/my-recipes");
   }
 
   return (
@@ -58,6 +74,7 @@ export default function CreateRecipePage() {
                 <Form.Group>
                   <Form.Label className="fs-5">Recipe name</Form.Label>
                   <Form.Control
+                    required
                     type="text"
                     maxLength={80}
                     minLength={5}
@@ -69,6 +86,7 @@ export default function CreateRecipePage() {
                 <Form.Group>
                   <Form.Label className="fs-5">Description</Form.Label>
                   <Form.Control
+                    required
                     type="text"
                     as="textarea"
                     rows={3}
@@ -86,6 +104,7 @@ export default function CreateRecipePage() {
                 <Form.Group>
                   <Form.Label className="fs-5">Recipe instructions</Form.Label>
                   <Form.Control
+                    required
                     type="text"
                     as="textarea"
                     rows={6}
@@ -102,7 +121,14 @@ export default function CreateRecipePage() {
 
                 <Form.Group controlId="formFile" className="mb-3 mt-4">
                   <Form.Label>Upload image for your recipe</Form.Label>
-                  <Form.Control type="file" />
+                  <Form.Control
+                    required
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      setFile((e.target as HTMLInputElement).files?.[0] ?? null)
+                    }
+                  />
                 </Form.Group>
 
                 <div className="d-grid gap-2">
