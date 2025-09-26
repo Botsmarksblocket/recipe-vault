@@ -1,4 +1,4 @@
-import { Card, Col } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import StarRating from "../utils/reactStars";
@@ -24,7 +24,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         <Card.Body>
           {imagePath && (
             <div className="card-image-wrapper">
-              <Card.Img src={`/recipe_images/${imagePath}`} alt={recipeName} />
+              {/* TODO: Update for production */}
+              <Card.Img
+                src={`/backend/wwwroot/uploads/${imagePath}`}
+                alt={recipeName}
+              />
             </div>
           )}
 

@@ -8,8 +8,16 @@ import HomePage from "./pages/HomePage.tsx";
 import RecipePage from "./pages/RecipePage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import UsersRecipesPage from "./pages/UsersRecipesPage.tsx";
+import CreateRecipePage from "./pages/CreateRecipePage.tsx";
 
-export default [NotFoundPage, HomePage, RecipePage, LoginPage, UsersRecipesPage]
+export default [
+  NotFoundPage,
+  HomePage,
+  RecipePage,
+  LoginPage,
+  UsersRecipesPage,
+  CreateRecipePage,
+]
   .map((Page) => {
     const routeProps: Partial<Route> = Page.route || {};
 
@@ -21,7 +29,4 @@ export default [NotFoundPage, HomePage, RecipePage, LoginPage, UsersRecipesPage]
   })
   .sort((a, b) => (a.index || 0) - (b.index || 0));
 
-// // map the route property of each page component to a Route
-// .map((x) => ({ element: createElement(x), ...x.route } as Route))
-// // sort by index (and if an item has no index, sort as index 0)
-// .sort((a, b) => (a.index || 0) - (b.index || 0));
+

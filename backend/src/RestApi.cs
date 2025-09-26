@@ -1,4 +1,6 @@
 namespace WebApp;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 public static class RestApi
 {
     public static void Start()
@@ -67,5 +69,39 @@ public static class RestApi
                 context
             ))
         );
+
+        // Uploads a file
+        App.MapPost("/api/upload", async (
+            HttpContext context, IWebHostEnvironment env
+        ) =>
+        {
+
+         // Parse the incoming form-data request
+         var form = await context.Request.ReadFormAsync();
+
+        // Accept uploaded file with field name "image"
+         var file = form.Files["image"]; 
+         
+        
+           if (file == null || file.Length == 0)
+                return Results.BadRequest(new { error = "No file uploaded" });
+    
+         var fileName = file.FileName; 
+
+         //Build uploads folder path inside wwwroot if it doeesnt exist
+         var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
+         if (!Directory.Exists(uploadsFolder))
+               Directory.CreateDirectory(uploadsFolder);
+
+           var filePath = Path.Combine(uploadsFolder, fileName);
+
+           // Saves the uploaded file to disk
+           using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+         return Results.Ok(new { fileName });
+        });
     }
 }
