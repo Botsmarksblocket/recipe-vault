@@ -1,6 +1,8 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import type Ingredient from "../interfaces/Ingredient";
+import { createSlug } from "../utils/slug";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 CreateRecipePage.route = {
@@ -29,6 +31,21 @@ export default function CreateRecipePage() {
     setRecipe({ ...recipe, [name]: value });
   }
 
+  const navigate = useNavigate();
+
+  async function sendForm(event: React.FormEvent) {
+    event.preventDefault();
+
+    const payload: any = { ...recipe };
+
+    await fetch("api/recipes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    navigate(`/recipe/${user?.id}/${createSlug(payload.recipeName)}`);
+  }
+
   return (
     <>
       <Row>
@@ -37,55 +54,63 @@ export default function CreateRecipePage() {
             <Card.Body>
               <Card.Title className="fs-1">Create recipe</Card.Title>
 
-              <Form.Group>
-                <Form.Label className="fs-5">Recipe name</Form.Label>
-                <Form.Control
-                  type="text"
-                  maxLength={80}
-                  minLength={5}
-                  name="recipeName"
-                  onChange={setProperty}
-                ></Form.Control>
-              </Form.Group>
+              <Form onSubmit={sendForm}>
+                <Form.Group>
+                  <Form.Label className="fs-5">Recipe name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    maxLength={80}
+                    minLength={5}
+                    name="recipeName"
+                    onChange={setProperty}
+                  ></Form.Control>
+                </Form.Group>
 
-              <Form.Group>
-                <Form.Label className="fs-5">Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  as="textarea"
-                  rows={3}
-                  minLength={30}
-                  maxLength={600}
-                  aria-describedby="descriptionHelpBlock"
-                  name="description"
-                  onChange={setProperty}
-                ></Form.Control>
-                <Form.Text id="descriptionHelpBlock" className="fst-italic">
-                  Description must be between 30 - 600 letters.
-                </Form.Text>
-              </Form.Group>
+                <Form.Group>
+                  <Form.Label className="fs-5">Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    as="textarea"
+                    rows={3}
+                    minLength={30}
+                    maxLength={600}
+                    aria-describedby="descriptionHelpBlock"
+                    name="description"
+                    onChange={setProperty}
+                  ></Form.Control>
+                  <Form.Text id="descriptionHelpBlock" className="fst-italic">
+                    Description must be between 30 - 600 letters.
+                  </Form.Text>
+                </Form.Group>
 
-              <Form.Group>
-                <Form.Label className="fs-5">Recipe instructions</Form.Label>
-                <Form.Control
-                  type="text"
-                  as="textarea"
-                  rows={6}
-                  minLength={30}
-                  maxLength={1000}
-                  aria-describedby="instructionsHelpBlock"
-                  name="instructions"
-                  onChange={setProperty}
-                ></Form.Control>
-                <Form.Text id="instructionsHelpBlock" className="fst-italic">
-                  Instructions must be between 50 - 1000 letters.
-                </Form.Text>
-              </Form.Group>
+                <Form.Group>
+                  <Form.Label className="fs-5">Recipe instructions</Form.Label>
+                  <Form.Control
+                    type="text"
+                    as="textarea"
+                    rows={6}
+                    minLength={30}
+                    maxLength={1000}
+                    aria-describedby="instructionsHelpBlock"
+                    name="instructions"
+                    onChange={setProperty}
+                  ></Form.Control>
+                  <Form.Text id="instructionsHelpBlock" className="fst-italic">
+                    Instructions must be between 50 - 1000 letters.
+                  </Form.Text>
+                </Form.Group>
 
-              <Form.Group controlId="formFile" className="mb-3 mt-4">
-                <Form.Label>Upload image for your recipe</Form.Label>
-                <Form.Control type="file" />
-              </Form.Group>
+                <Form.Group controlId="formFile" className="mb-3 mt-4">
+                  <Form.Label>Upload image for your recipe</Form.Label>
+                  <Form.Control type="file" />
+                </Form.Group>
+
+                <div className="d-grid gap-2">
+                  <Button type="submit" variant="success" className="fs-4 ">
+                    Create recipe!
+                  </Button>
+                </div>
+              </Form>
             </Card.Body>
           </Card>
         </Col>
