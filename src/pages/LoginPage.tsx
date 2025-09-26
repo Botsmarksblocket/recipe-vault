@@ -48,10 +48,10 @@ export default function LoginPage() {
               <Card.Title className="fs-1">Log in</Card.Title>
               <Form onSubmit={sendForm}>
                 <Form.Group>
-                  <Form.Label className="d-block mt-3">Username</Form.Label>
+                  <Form.Label className="d-block mt-3">Email</Form.Label>
                   <Form.Control
                     onChange={setProperty}
-                    type="text"
+                    type="email"
                     name="email"
                     placeholder="Enter email..."
                     className="d-block mt-2"
