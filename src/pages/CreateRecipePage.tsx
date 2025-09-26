@@ -1,5 +1,6 @@
-import { Row, Col } from "react-bootstrap";
-import { useLoaderData } from "react-router-dom";
+import { Row, Col, Form, Card, Button } from "react-bootstrap";
+import type Ingredient from "../interfaces/Ingredient";
+import { useState } from "react";
 
 CreateRecipePage.route = {
   path: "/create-recipe",
@@ -11,11 +12,56 @@ export default function CreateRecipePage() {
   return (
     <>
       <Row>
-        <Col className="d-flex flex-column justify-content-center align-items-center">
-          <h1></h1>
+        <Col className="d-flex justify-content-center">
+          <Card className="mt-3" style={{ width: "45rem" }}>
+            <Card.Body>
+              <Card.Title className="fs-1">Create recipe</Card.Title>
 
-          <h2></h2>
-          <h2></h2>
+              <Form.Group>
+                <Form.Label className="fs-5">Recipe name</Form.Label>
+                <Form.Control
+                  type="text"
+                  maxLength={80}
+                  minLength={5}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label className="fs-5">Description</Form.Label>
+                <Form.Control
+                  type="text"
+                  as="textarea"
+                  rows={3}
+                  minLength={30}
+                  maxLength={600}
+                  aria-describedby="descriptionHelpBlock"
+                ></Form.Control>
+                <Form.Text id="descriptionHelpBlock" className="fst-italic">
+                  Description must be between 30 - 600 letters.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label className="fs-5">Recipe instructions</Form.Label>
+                <Form.Control
+                  type="text"
+                  as="textarea"
+                  rows={6}
+                  minLength={30}
+                  maxLength={1000}
+                  aria-describedby="instructionsHelpBlock"
+                ></Form.Control>
+                <Form.Text id="instructionsHelpBlock" className="fst-italic">
+                  Instructions must be between 50 - 1000 letters.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group controlId="formFile" className="mb-3 mt-4">
+                <Form.Label>Upload image for your recipe</Form.Label>
+                <Form.Control type="file" />
+              </Form.Group>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </>

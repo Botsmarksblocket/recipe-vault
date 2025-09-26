@@ -21,7 +21,7 @@ export default function LoginPage() {
   //prevents the user from going to the login page if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/"); 
+      navigate("/");
     }
   }, [user, navigate]);
 
