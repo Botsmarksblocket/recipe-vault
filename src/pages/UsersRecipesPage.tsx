@@ -1,7 +1,7 @@
 import type Recipe from "../interfaces/Recipe";
 import RecipeCard from "../components/RecipeCard";
 import { useEffect, useState } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Spinner } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 
 UsersRecipesPage.route = {
@@ -14,12 +14,14 @@ UsersRecipesPage.route = {
 export default function UsersRecipesPage() {
   const { user } = useAuth();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
     fetch(`/api/recipes/?where=createdBy=${user.id}`)
       .then((res) => res.json())
-      .then((data) => setRecipes(data));
+      .then((data) => setRecipes(data))
+      .finally(() => setLoading(false));
   }, [user]);
 
   const recipesWithRating = recipes.map((recipe) => ({
@@ -35,7 +37,11 @@ export default function UsersRecipesPage() {
         </Col>
       </Row>
       <Row>
-        {recipesWithRating.length > 0 ? (
+        {loading ? (
+          <Col className="text-center">
+            <Spinner className="mt-5"></Spinner>
+          </Col>
+        ) : recipesWithRating.length > 0 ? (
           recipesWithRating.map((recipe) => (
             <Col
               xs={12}

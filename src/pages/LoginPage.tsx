@@ -1,27 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Form, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 
-// Route metadata
 LoginPage.route = {
   path: "/login",
 };
 
 export default function LoginPage() {
-  // --- Types ---
   interface UserForm {
     email: string;
     password: string;
   }
 
-  // --- Hooks (state, navigation) ---
   const [formUser, setUser] = useState<UserForm>({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { loginUser, loading } = useAuth();
+  const { loginUser, loading, user } = useAuth();
   const navigate = useNavigate();
 
-  // --- Handlers ---
+  //prevents the user from going to the login page if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/"); 
+    }
+  }, [user, navigate]);
+
   function setProperty(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     setUser({ ...formUser, [name]: value });
