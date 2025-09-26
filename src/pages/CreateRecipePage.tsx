@@ -1,4 +1,5 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
+import { useAuth } from "../context/AuthProvider";
 import type Ingredient from "../interfaces/Ingredient";
 import { useState } from "react";
 
@@ -8,7 +9,26 @@ CreateRecipePage.route = {
   requiresAuth: true,
   index: 3,
 };
+
 export default function CreateRecipePage() {
+  const { user } = useAuth();
+  console.log(user);
+
+  const [recipe, setRecipe] = useState({
+    createdBy: user?.id,
+    recipeName: "",
+    description: "",
+    imagePath: "",
+    instructions: "",
+  });
+
+  function setProperty(event: React.ChangeEvent) {
+    let { name, value }: { name: string; value: string | number } =
+      event.target as HTMLInputElement;
+
+    setRecipe({ ...recipe, [name]: value });
+  }
+
   return (
     <>
       <Row>
@@ -23,6 +43,8 @@ export default function CreateRecipePage() {
                   type="text"
                   maxLength={80}
                   minLength={5}
+                  name="recipeName"
+                  onChange={setProperty}
                 ></Form.Control>
               </Form.Group>
 
@@ -35,6 +57,8 @@ export default function CreateRecipePage() {
                   minLength={30}
                   maxLength={600}
                   aria-describedby="descriptionHelpBlock"
+                  name="description"
+                  onChange={setProperty}
                 ></Form.Control>
                 <Form.Text id="descriptionHelpBlock" className="fst-italic">
                   Description must be between 30 - 600 letters.
@@ -50,6 +74,8 @@ export default function CreateRecipePage() {
                   minLength={30}
                   maxLength={1000}
                   aria-describedby="instructionsHelpBlock"
+                  name="instructions"
+                  onChange={setProperty}
                 ></Form.Control>
                 <Form.Text id="instructionsHelpBlock" className="fst-italic">
                   Instructions must be between 50 - 1000 letters.
