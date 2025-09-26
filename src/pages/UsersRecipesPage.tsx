@@ -16,9 +16,14 @@ export default function UsersRecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
 
+  console.log(user);
+  console.log(recipes);
+
   useEffect(() => {
-    if (!user) return;
-    fetch(`/api/recipes/?where=createdBy=${user.id}`)
+    if (!user?.id) return;
+
+    // TODO: Hardcoded localhost to bypass proxy issues. In production, replace with a relative URL (`/api/...`) or use env variable
+    fetch(`http://localhost:5173/api/recipes/?where=createdBy=${user.id}`)
       .then((res) => res.json())
       .then((data) => setRecipes(data))
       .finally(() => setLoading(false));
