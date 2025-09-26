@@ -39,7 +39,7 @@ export default function CreateRecipePage() {
     // Generates a filename
     let fileName;
     const extension = file?.name.split(".").pop();
-    fileName = `${uuidv4}.${extension}`;
+    fileName = `${uuidv4()}.${extension}`;
 
     const payload: any = { ...recipe, imagePath: fileName };
 
@@ -124,7 +124,8 @@ export default function CreateRecipePage() {
                   <Form.Control
                     required
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png"
+                    // Takes the first file that the user picks
                     onChange={(e) =>
                       setFile((e.target as HTMLInputElement).files?.[0] ?? null)
                     }
