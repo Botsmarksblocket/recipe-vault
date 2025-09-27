@@ -1,6 +1,9 @@
 import type Recipe from "../interfaces/Recipe";
 import RecipeCard from "../components/RecipeCard";
 import { useEffect, useState } from "react";
+import { createSlug } from "../utils/slug";
+import { Link } from "react-router-dom";
+
 import { Row, Col, Button, Spinner } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 
@@ -57,7 +60,12 @@ export default function UsersRecipesPage() {
                 <RecipeCard recipe={recipe} />
               </div>
 
-              <Button className="mt-1 mb-3 w-100">Edit recipe</Button>
+              <Link
+                to={`/edit-recipe/${recipe.id}/${createSlug(recipe.recipeName)}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Button className="mt-1 mb-3 w-100">Edit recipe</Button>
+              </Link>
             </Col>
           ))
         ) : (
