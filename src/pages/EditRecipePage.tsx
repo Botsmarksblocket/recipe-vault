@@ -115,9 +115,18 @@ export default function EditRecipePage() {
         <Col className="d-flex justify-content-center">
           <Card className="mt-3" style={{ width: "45rem" }}>
             <Card.Body>
-              <Card.Title className="fs-1">Edit recipe</Card.Title>
-
+              <Card.Title className="fs-1 ">Edit recipe</Card.Title>
               <Form onSubmit={sendForm}>
+                {recipe.imagePath && (
+                  <div className="mt-3 mt-md-0 ">
+                    {/* TODO Update src for production */}
+                    <Card.Img
+                      src={`/backend/wwwroot/uploads/${recipe.imagePath}`}
+                      alt="Recipe image"
+                      className="w-50"
+                    />
+                  </div>
+                )}{" "}
                 <Form.Group>
                   <Form.Label className="fs-5">Recipe name</Form.Label>
                   <Form.Control
@@ -221,7 +230,6 @@ export default function EditRecipePage() {
                     </Row>
                   ))}
                 </Form.Group>
-
                 <Row className="d-flex mt-5">
                   <Col xs={6}>
                     <Button
