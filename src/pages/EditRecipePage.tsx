@@ -90,50 +90,33 @@ export default function EditRecipePage() {
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
 
-    // Generates a filename
-    let fileName;
-    const extension = file?.name.split(".").pop();
-    fileName = `${uuidv4()}.${extension}`;
+    const payload: any = { ...recipe };
 
-    const payload: any = { ...recipe, imagePath: fileName };
-
-    //Uploads the recipe
+    // Uploads the recipe
     const recipeResult = await fetch("/api/recipes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    // Takes the recipes insertId and assigns it to recipeId, which will be used to link the ingredients to the recipes
+    // Takes the recipe insertId and assigns it to recipeId
     const recipeData = await recipeResult.json();
     const recipeId = recipeData.insertId;
 
-    //Uploads the image
-    if (file) {
-      const formData = new FormData();
-      // Prepares file and filename to be sent as form data under the key "image"
-      formData.append("image", file, fileName);
+    // Uploads the ingredients if there are any
+    if (ingredients && ingredients.length > 0) {
+      // Updates the recipesId for all ingredients
+      const ingredientsWithRecipeId = ingredients.map((ingredient) => ({
+        ...ingredient,
+        recipesId: recipeId,
+      }));
 
-      await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      // Uploads the ingredients if there are any
-      if (ingredients && ingredients.length > 0) {
-        // Updates the recipesId for all ingredients
-        const ingredientsWithRecipeId = ingredients.map((ingredient) => ({
-          ...ingredient,
-          recipesId: recipeId,
-        }));
-
-        for (const ingredient of ingredientsWithRecipeId) {
-          await fetch("/api/ingredients", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ingredient),
-          });
-        }
+      for (const ingredient of ingredientsWithRecipeId) {
+        await fetch("/api/ingredients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ingredient),
+        });
       }
     }
 
