@@ -1,6 +1,6 @@
 # Recipe vault
 
-MovieFinder is a web application which allows users to view, create and share recipes.
+Recipe vault is a web application which allows users to view, create and share recipes.
 
 ## Frontend
 
