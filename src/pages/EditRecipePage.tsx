@@ -1,0 +1,256 @@
+import { Row, Col, Form, Card, Button } from "react-bootstrap";
+// import { useAuth } from "../context/AuthProvider";
+import type Recipe from "../interfaces/Recipe";
+import type Ingredient from "../interfaces/Ingredient";
+
+import { useNavigate, useLoaderData } from "react-router-dom";
+import { useState } from "react";
+
+EditRecipePage.route = {
+  path: "/edit-recipe/:id/:slug",
+  requiresAuth: true,
+  index: 3,
+  loader: async ({ params }: { params: any }) => {
+    const { id } = params!;
+    const recipe = await (await fetch(`/api/recipes/${id}`)).json();
+    const ingredients = await (
+      await fetch(`/api/ingredients/?where=recipesId=${id}`)
+    ).json();
+    return { recipe, ingredients };
+  },
+};
+
+export default function EditRecipePage() {
+  const {
+    recipe: initialRecipe,
+    ingredients: initialIngredients,
+  }: {
+    recipe: Recipe;
+    ingredients: Ingredient[];
+  } = useLoaderData();
+
+  const [recipe, setRecipe] = useState(initialRecipe);
+  const [ingredients, setIngredients] = useState(initialIngredients);
+
+  const navigate = useNavigate();
+
+  // Updates either name or amount of specific ingredient
+  const handleIngredientChange = (
+    id: number,
+    field: "name" | "amount",
+    value: string
+  ) => {
+    // Maps through preview array of ingredients
+    // If current ingredient's id matches, it creates a new object with the same properties but override chosen field with value
+    // Otherwise ingredients remains unchanged
+    setIngredients((prev) =>
+      prev.map((ingredient) =>
+        ingredient.id === id ? { ...ingredient, [field]: value } : ingredient
+      )
+    );
+  };
+
+  const removeIngredientRow = (id: number) => {
+    setIngredients((prev) => prev.filter((ingredient) => ingredient.id !== id));
+  };
+
+  const addIngredientRow = () => {
+    // New id gets created based on previously highest id
+    const newId = ingredients.length
+      ? Math.max(...ingredients.map((i) => i.id)) + 1
+      : 1;
+    // New ingredient object gets added with the new id and empty values
+    setIngredients((prev) => [
+      ...prev,
+      { id: newId, name: "", amount: "", recipesId: 0 },
+    ]);
+  };
+
+  function setProperty(event: React.ChangeEvent) {
+    let { name, value }: { name: string; value: string | number } =
+      event.target as HTMLInputElement;
+
+    setRecipe({ ...recipe, [name]: value });
+  }
+
+  async function sendForm(event: React.FormEvent) {
+    event.preventDefault();
+
+    const payload: any = { ...recipe };
+
+    // Uploads the recipe
+    const recipeResult = await fetch("/api/recipes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    // Takes the recipe insertId and assigns it to recipeId
+    const recipeData = await recipeResult.json();
+    const recipeId = recipeData.insertId;
+
+    // Uploads the ingredients if there are any
+    if (ingredients && ingredients.length > 0) {
+      // Updates the recipesId for all ingredients
+      const ingredientsWithRecipeId = ingredients.map((ingredient) => ({
+        ...ingredient,
+        recipesId: recipeId,
+      }));
+
+      for (const ingredient of ingredientsWithRecipeId) {
+        await fetch("/api/ingredients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ingredient),
+        });
+      }
+    }
+
+    navigate("/my-recipes");
+  }
+
+  return (
+    <>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Card className="mt-3" style={{ width: "45rem" }}>
+            <Card.Body>
+              <Card.Title className="fs-1 ">Edit recipe</Card.Title>
+              <Form onSubmit={sendForm}>
+                {recipe.imagePath && (
+                  <div className="mt-3 mt-md-0 ">
+                    {/* TODO Update src for production */}
+                    <Card.Img
+                      src={`/backend/wwwroot/uploads/${recipe.imagePath}`}
+                      alt="Recipe image"
+                      className="w-50"
+                    />
+                  </div>
+                )}{" "}
+                <Form.Group>
+                  <Form.Label className="fs-5">Recipe name</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    maxLength={80}
+                    minLength={5}
+                    name="recipeName"
+                    onChange={setProperty}
+                    value={recipe.recipeName}
+                  ></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className="fs-5">Description</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    as="textarea"
+                    rows={3}
+                    minLength={30}
+                    maxLength={600}
+                    aria-describedby="descriptionHelpBlock"
+                    name="description"
+                    value={recipe.description}
+                    onChange={setProperty}
+                  ></Form.Control>
+                  <Form.Text id="descriptionHelpBlock" className="fst-italic">
+                    Description must be between 30 - 600 letters.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className="fs-5">Recipe instructions</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    as="textarea"
+                    rows={6}
+                    minLength={30}
+                    maxLength={1000}
+                    aria-describedby="instructionsHelpBlock"
+                    name="instructions"
+                    value={recipe.instructions}
+                    onChange={setProperty}
+                  ></Form.Control>
+                  <Form.Text id="instructionsHelpBlock" className="fst-italic">
+                    Instructions must be between 50 - 1000 letters.
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group className="mt-4">
+                  <Form.Label className="fs-5">Ingredients</Form.Label>
+
+                  <div className="d-grid gap-2">
+                    <Button
+                      variant="primary"
+                      onClick={addIngredientRow}
+                      className="mt-2 mb-2"
+                    >
+                      + Add Ingredient
+                    </Button>
+                  </div>
+
+                  {ingredients.map((ingredient) => (
+                    <Row key={ingredient.id} className="mb-2 g-1 p-0 m-0">
+                      <Col xs={4}>
+                        <Form.Control
+                          type="text"
+                          placeholder="Amount"
+                          value={ingredient.amount}
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              ingredient.id,
+                              "amount",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </Col>
+                      <Col xs={7}>
+                        <Form.Control
+                          required
+                          type="text"
+                          placeholder="Ingredient"
+                          value={ingredient.name}
+                          onChange={(e) =>
+                            handleIngredientChange(
+                              ingredient.id,
+                              "name",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </Col>
+                      <Col xs={1}>
+                        <Button
+                          variant="danger"
+                          onClick={() => removeIngredientRow(ingredient.id)}
+                        >
+                          X
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))}
+                </Form.Group>
+                <Row className="d-flex mt-5">
+                  <Col xs={6}>
+                    <Button
+                      type="submit"
+                      variant="success"
+                      className="fs-4 w-100"
+                    >
+                      Update recipe
+                    </Button>
+                  </Col>
+                  <Col xs={6}>
+                    <Button variant="danger" className="w-100 fs-4">
+                      Delete recipe
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
+}

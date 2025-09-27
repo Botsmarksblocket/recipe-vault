@@ -1,5 +1,4 @@
 import type Recipe from "../interfaces/Recipe";
-import type Ingredient from "../interfaces/Ingredient";
 import RecipeCard from "../components/RecipeCard";
 import { Row, Col } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
@@ -18,7 +17,6 @@ export default function HomePage() {
     recipes,
   }: {
     recipes: Recipe[];
-    ingredients: Ingredient[];
   } = useLoaderData();
 
   const recipesWithRating = recipes.map((recipe) => ({

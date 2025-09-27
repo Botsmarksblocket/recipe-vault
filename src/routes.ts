@@ -9,6 +9,7 @@ import RecipePage from "./pages/RecipePage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import UsersRecipesPage from "./pages/UsersRecipesPage.tsx";
 import CreateRecipePage from "./pages/CreateRecipePage.tsx";
+import EditRecipePage from "./pages/EditRecipePage.tsx";
 
 export default [
   NotFoundPage,
@@ -17,6 +18,7 @@ export default [
   LoginPage,
   UsersRecipesPage,
   CreateRecipePage,
+  EditRecipePage,
 ]
   .map((Page) => {
     const routeProps: Partial<Route> = Page.route || {};
@@ -28,5 +30,3 @@ export default [
     return { element, ...routeProps } as Route;
   })
   .sort((a, b) => (a.index || 0) - (b.index || 0));
-
-
