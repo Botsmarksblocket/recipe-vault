@@ -1,12 +1,10 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
-import { useAuth } from "../context/AuthProvider";
-import { v4 as uuidv4 } from "uuid";
+// import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
 import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
 
 EditRecipePage.route = {
   path: "/edit-recipe/:id/:slug",
@@ -23,30 +21,18 @@ EditRecipePage.route = {
 };
 
 export default function EditRecipePage() {
-  // const {
-  //   recipe,
-  //   ingredients,
-  // }: {
-  //   recipe: Recipe;
-  //   ingredients: Ingredient[];
-  // } = useLoaderData();
+  const {
+    recipe: initialRecipe,
+    ingredients: initialIngredients,
+  }: {
+    recipe: Recipe;
+    ingredients: Ingredient[];
+  } = useLoaderData();
 
-  const { user } = useAuth();
+  const [recipe, setRecipe] = useState(initialRecipe);
+  const [ingredients, setIngredients] = useState(initialIngredients);
+
   const navigate = useNavigate();
-  const [file, setFile] = useState<File | null>(null);
-
-  const [recipe, setRecipe] = useState({
-    createdBy: user?.id,
-    recipeName: "",
-    description: "",
-    imagePath: "",
-    instructions: "",
-  });
-
-  // Starts with one ingredient with empty fields
-  const [ingredients, setIngredients] = useState<Ingredient[]>([
-    { id: 0, name: "", amount: "", recipesId: 0 },
-  ]);
 
   // Updates either name or amount of specific ingredient
   const handleIngredientChange = (
@@ -141,6 +127,7 @@ export default function EditRecipePage() {
                     minLength={5}
                     name="recipeName"
                     onChange={setProperty}
+                    value={recipe.recipeName}
                   ></Form.Control>
                 </Form.Group>
                 <Form.Group>
@@ -154,6 +141,7 @@ export default function EditRecipePage() {
                     maxLength={600}
                     aria-describedby="descriptionHelpBlock"
                     name="description"
+                    value={recipe.description}
                     onChange={setProperty}
                   ></Form.Control>
                   <Form.Text id="descriptionHelpBlock" className="fst-italic">
@@ -171,6 +159,7 @@ export default function EditRecipePage() {
                     maxLength={1000}
                     aria-describedby="instructionsHelpBlock"
                     name="instructions"
+                    value={recipe.instructions}
                     onChange={setProperty}
                   ></Form.Control>
                   <Form.Text id="instructionsHelpBlock" className="fst-italic">
