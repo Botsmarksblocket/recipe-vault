@@ -1,17 +1,36 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
+import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
 EditRecipePage.route = {
   path: "/edit-recipe/:id/:slug",
   requiresAuth: true,
   index: 3,
+  loader: async ({ params }: { params: any }) => {
+    const { id } = params!;
+    const recipe = await (await fetch(`/api/recipes/${id}`)).json();
+    const ingredients = await (
+      await fetch(`/api/ingredients/?where=recipesId=${id}`)
+    ).json();
+    return { recipe, ingredients };
+  },
 };
 
 export default function EditRecipePage() {
+  // const {
+  //   recipe,
+  //   ingredients,
+  // }: {
+  //   recipe: Recipe;
+  //   ingredients: Ingredient[];
+  // } = useLoaderData();
+
   const { user } = useAuth();
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
