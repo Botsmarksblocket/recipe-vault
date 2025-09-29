@@ -102,66 +102,43 @@ export default function EditRecipePage() {
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
 
-    const payload: any = { ...recipe };
-
     // Uploads the recipe
-    await fetch(`/api/recipes/${payload.id}`, {
+    await fetch(`/api/recipes/${recipe.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(recipe),
     });
 
-    // Updates the recipesId with the initial recipes Id
-    const ingredientsWithRecipeId = ingredients.map((ingredient) => ({
-      ...ingredient,
+    //Helper to get payload for DB
+    const getIngredientPayload = (ingredient: IngredientWithStatus) => ({
+      id: ingredient.id,
+      name: ingredient.name,
+      amount: ingredient.amount,
       recipesId: initialRecipe.id,
-    }));
+    });
 
-    for (const ingredient of ingredientsWithRecipeId) {
+    for (const ingredient of ingredients) {
       // Don't want to send the status of the ingredient to the db
-      const payload = {
-        id: ingredient.id,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        recipesId: initialRecipe.id,
-      };
+      const payload = getIngredientPayload(ingredient);
 
-      switch (ingredient.status) {
-        case "new":
-          await fetch("/api/ingredients", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          break;
-
-        case "updated": {
-          await fetch(`/api/ingredients/${payload.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          break;
-        }
-
-        case "deleted": {
-          // Only delete if ingredient actually exists in database
-          console.log("Deleting ingredient:", payload);
-
-          if (payload.id > 0) {
-            await fetch(`/api/ingredients/${payload.id}`, {
-              method: "DELETE",
-            });
-          }
-          break;
-        }
-
-        case "existing":
-          //Nothing happens if ingredient exists and is unchanged
-          break;
-      }
+      if (ingredient.status === "new")
+        await fetch("/api/ingredients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      else if (ingredient.status === "updated")
+        await fetch(`/api/ingredients/${payload.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      // Only delete if ingredient actually exists in database
+      else if (ingredient.status === "deleted" && payload.id > 0)
+        await fetch(`/api/ingredients/${payload.id}`, {
+          method: "DELETE",
+        });
     }
-
     navigate("/my-recipes");
   }
 
