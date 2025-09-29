@@ -29,33 +29,49 @@ export default function EditRecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState(initialRecipe);
 
-  const navigate = useNavigate();
+  function setProperty(event: React.ChangeEvent) {
+    let { name, value }: { name: string; value: string | number } =
+      event.target as HTMLInputElement;
 
-  ////////////////////// REDUCER IMPLEMENTATION ////////////////////
+    setRecipe({ ...recipe, [name]: value });
+  }
 
-  type IngredientStatus = "existing" | "new" | "updated" | "deleted";
+  // Tracks the status of each ingredient in the form
+  type IngredientStatus =
+    | "existing" //already exists in DB and unchanged
+    | "new" //just added in the form
+    | "updated" //existing ingredient which is modified
+    | "deleted"; //marked for removal
 
+  // Extends the Ingredient type to include a status for UI and DB operations
   type IngredientWithStatus = Ingredient & {
     status: IngredientStatus;
   };
 
+  // Actions that can be dispatched to the ingredient reducer
   type Action =
     | { type: "add" }
     | { type: "remove"; id: number }
     | { type: "update"; id: number; field: "name" | "amount"; value: string }
     | { type: "hydrate"; payload: Ingredient[] };
 
+  const [ingredients, dispatch] = useReducer(ingredientReducer, []);
+
+  //Reducer which manages the ingredient list in the form
   function ingredientReducer(
     state: IngredientWithStatus[],
     action: Action
   ): IngredientWithStatus[] {
     switch (action.type) {
       case "hydrate":
+        // Initializes ingriedients from the db and marks them as existing
         return action.payload.map((i) => ({ ...i, status: "existing" }));
 
       case "add":
+        // Generates a temporary ID (not db id) for new ingredient rows
         const newId = state.length
           ? Math.max(...state.map((i) => i.id)) + 1
           : 1;
@@ -65,11 +81,14 @@ export default function EditRecipePage() {
         ];
 
       case "remove":
+        //Marks a ingredient as deleted (gets removed from UI, may be deleted from the db)
         return state.map((i) =>
           i.id === action.id ? { ...i, status: "deleted" } : i
         );
 
       case "update":
+        //Updates a field of an ingredient
+        //If the ingredient already exists, mark it as updated
         return state.map((i) =>
           i.id === action.id
             ? {
@@ -85,19 +104,10 @@ export default function EditRecipePage() {
     }
   }
 
-  const [ingredients, dispatch] = useReducer(ingredientReducer, []);
-
   // when loader runs:
   useEffect(() => {
     dispatch({ type: "hydrate", payload: initialIngredients });
   }, [initialIngredients]);
-
-  function setProperty(event: React.ChangeEvent) {
-    let { name, value }: { name: string; value: string | number } =
-      event.target as HTMLInputElement;
-
-    setRecipe({ ...recipe, [name]: value });
-  }
 
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
