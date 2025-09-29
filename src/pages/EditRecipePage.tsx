@@ -80,7 +80,7 @@ export default function EditRecipePage() {
 
     // Uploads the recipe
     const recipeResult = await fetch("/api/recipes", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });

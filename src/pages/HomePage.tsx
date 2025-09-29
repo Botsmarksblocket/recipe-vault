@@ -33,8 +33,8 @@ export default function HomePage() {
       </Row>
       <Row>
         {recipesWithRating.map((recipe) => (
-          <Col xs={12} sm={6} md={4} lg={3} className="mb-3">
-            <RecipeCard key={recipe.id} recipe={recipe} />
+          <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
+            <RecipeCard recipe={recipe} />
           </Col>
         ))}
       </Row>
