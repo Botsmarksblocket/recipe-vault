@@ -2,7 +2,7 @@ import { Row, Col, Form, Card, Button } from "react-bootstrap";
 // import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
-
+import ConfirmModal from "../components/ConfirmModal";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import { useState, useReducer, useEffect } from "react";
 
@@ -290,9 +290,8 @@ export default function EditRecipePage() {
                     </Button>
                   </Col>
                   <Col xs={6}>
-                    <Button variant="danger" className="w-100 fs-4">
-                      Delete recipe
-                    </Button>
+                    <ConfirmModal></ConfirmModal>
+
                   </Col>
                 </Row>
               </Form>
