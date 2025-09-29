@@ -104,11 +104,11 @@ public static class RestApi
         });
 
         // Deletes a file
-        App.MapDelete("/api/upload/{filename}", (string fileName, IWebHostEnvironment env
+        App.MapDelete("/api/upload/{filename}", (string filename, IWebHostEnvironment env
              ) =>
         {
             var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
-            var filePath = Path.Combine(uploadsFolder, fileName);
+            var filePath = Path.Combine(uploadsFolder, filename);
 
             if (!File.Exists(filePath))
             {

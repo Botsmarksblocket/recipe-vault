@@ -152,14 +152,31 @@ export default function EditRecipePage() {
     navigate("/my-recipes");
   }
 
-  function deleteRecipe() {
-    
+  async function deleteRecipe() {
+    // //Deletes the recipes image file
+    await fetch(`/api/upload/${recipe.imagePath}`, {
+      method: "DELETE",
+    });
 
+    const response = await fetch(
+      `/api/ingredients?where=recipesId=${recipe.id}`
+    );
 
+    const ingredientsToDelete = await response.json();
 
+    //Deletes all the ingredients connected to the recipe
+    for (const ingredient of ingredientsToDelete) {
+      await fetch(`/api/ingredients/${ingredient.id}`, {
+        method: "DELETE",
+      });
+    }
 
+    //Deletes the recipe
+    await fetch(`/api/recipes/${initialRecipe.id}`, {
+      method: "DELETE",
+    });
 
-    // navigate("/my-recipes");
+    navigate("/my-recipes");
   }
 
   return (
