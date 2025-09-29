@@ -92,22 +92,6 @@ export default function EditRecipePage() {
     dispatch({ type: "hydrate", payload: initialIngredients });
   }, [initialIngredients]);
 
-  const handleIngredientChange = (
-    id: number,
-    field: "name" | "amount",
-    value: string
-  ) => {
-    dispatch({ type: "update", id, field, value });
-  };
-
-  const removeIngredientRow = (id: number) => {
-    dispatch({ type: "remove", id });
-  };
-
-  const addIngredientRow = () => {
-    dispatch({ type: "add" });
-  };
-
   function setProperty(event: React.ChangeEvent) {
     let { name, value }: { name: string; value: string | number } =
       event.target as HTMLInputElement;
@@ -253,7 +237,7 @@ export default function EditRecipePage() {
                   <div className="d-grid gap-2">
                     <Button
                       variant="primary"
-                      onClick={addIngredientRow}
+                      onClick={() => dispatch({ type: "add" })}
                       className="mt-2 mb-2"
                     >
                       + Add Ingredient
@@ -270,11 +254,12 @@ export default function EditRecipePage() {
                             placeholder="Amount"
                             value={ingredient.amount}
                             onChange={(e) =>
-                              handleIngredientChange(
-                                ingredient.id,
-                                "amount",
-                                e.target.value
-                              )
+                              dispatch({
+                                type: "update",
+                                id: ingredient.id,
+                                field: "amount",
+                                value: e.target.value,
+                              })
                             }
                           />
                         </Col>
@@ -285,17 +270,21 @@ export default function EditRecipePage() {
                             placeholder="Ingredient"
                             value={ingredient.name}
                             onChange={(e) =>
-                              handleIngredientChange(
-                                ingredient.id,
-                                "name",
-                                e.target.value
-                              )
+                              dispatch({
+                                type: "update",
+                                id: ingredient.id,
+                                field: "name",
+                                value: e.target.value,
+                              })
                             }
                           />
                         </Col>
                         <Col xs={1}>
                           <Button
-                            onClick={() => removeIngredientRow(ingredient.id)}
+                            variant="danger"
+                            onClick={() =>
+                              dispatch({ type: "remove", id: ingredient.id })
+                            }
                           >
                             X
                           </Button>
