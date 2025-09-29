@@ -2,11 +2,20 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Modal } from "react-bootstrap";
 
-export default function ConfirmModal() {
+interface ConfirmModalProps {
+  onConfirm: () => void;
+}
+
+export default function ConfirmModal({ onConfirm }: ConfirmModalProps) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleConfirm = () => {
+    onConfirm();
+    handleClose;
+  };
 
   return (
     <>
@@ -23,7 +32,7 @@ export default function ConfirmModal() {
             size="lg"
             className="w-100 me-1"
             variant="secondary"
-            onClick={handleClose}
+            onClick={handleConfirm}
           >
             Yes
           </Button>

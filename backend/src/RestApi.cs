@@ -71,37 +71,59 @@ public static class RestApi
         );
 
         // Uploads a file
-        App.MapPost("/api/upload", async (
+        App.MapPost("/api/upload/", async (
             HttpContext context, IWebHostEnvironment env
         ) =>
         {
+            // Parse the incoming form-data request
+            var form = await context.Request.ReadFormAsync();
 
-         // Parse the incoming form-data request
-         var form = await context.Request.ReadFormAsync();
+            // Accept uploaded file with field name "image"
+            var file = form.Files["image"];
 
-        // Accept uploaded file with field name "image"
-         var file = form.Files["image"]; 
-         
-        
-           if (file == null || file.Length == 0)
+
+            if (file == null || file.Length == 0)
                 return Results.BadRequest(new { error = "No file uploaded" });
-    
-         var fileName = file.FileName; 
 
-         //Build uploads folder path inside wwwroot if it doeesnt exist
-         var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
-         if (!Directory.Exists(uploadsFolder))
-               Directory.CreateDirectory(uploadsFolder);
+            var fileName = file.FileName;
 
-           var filePath = Path.Combine(uploadsFolder, fileName);
+            //Build uploads folder path inside wwwroot if it doeesnt exist
+            var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
 
-           // Saves the uploaded file to disk
-           using (var stream = new FileStream(filePath, FileMode.Create))
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            // Saves the uploaded file to disk
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
-         return Results.Ok(new { fileName });
+            return Results.Ok(new { fileName });
         });
-    }
+
+        // Deletes a file
+        App.MapDelete("/api/upload/{filename}", (string fileName, IWebHostEnvironment env
+             ) =>
+        {
+            var uploadsFolder = Path.Combine(env.WebRootPath, "uploads");
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            if (!File.Exists(filePath))
+            {
+                return Results.NotFound(new { error = "File not found" });
+            }
+
+            try
+            {
+                File.Delete(filePath);
+                return Results.Ok();
+            }
+            catch (Exception)
+            {
+                return Results.Problem("Error deleting file");
+            }
+        });   
+    }    
 }

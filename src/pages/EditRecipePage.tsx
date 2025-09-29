@@ -152,6 +152,16 @@ export default function EditRecipePage() {
     navigate("/my-recipes");
   }
 
+  function deleteRecipe() {
+    
+
+
+
+
+
+    // navigate("/my-recipes");
+  }
+
   return (
     <>
       <Row>
@@ -290,8 +300,7 @@ export default function EditRecipePage() {
                     </Button>
                   </Col>
                   <Col xs={6}>
-                    <ConfirmModal></ConfirmModal>
-
+                    <ConfirmModal onConfirm={deleteRecipe} />
                   </Col>
                 </Row>
               </Form>
