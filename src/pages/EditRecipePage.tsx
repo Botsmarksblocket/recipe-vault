@@ -2,9 +2,9 @@ import { Row, Col, Form, Card, Button } from "react-bootstrap";
 // import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
-
+import ConfirmModal from "../components/ConfirmModal";
 import { useNavigate, useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { useState, useReducer, useEffect } from "react";
 
 EditRecipePage.route = {
   path: "/edit-recipe/:id/:slug",
@@ -29,42 +29,8 @@ export default function EditRecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const [recipe, setRecipe] = useState(initialRecipe);
-  const [ingredients, setIngredients] = useState(initialIngredients);
-
   const navigate = useNavigate();
-
-  // Updates either name or amount of specific ingredient
-  const handleIngredientChange = (
-    id: number,
-    field: "name" | "amount",
-    value: string
-  ) => {
-    // Maps through preview array of ingredients
-    // If current ingredient's id matches, it creates a new object with the same properties but override chosen field with value
-    // Otherwise ingredients remains unchanged
-    setIngredients((prev) =>
-      prev.map((ingredient) =>
-        ingredient.id === id ? { ...ingredient, [field]: value } : ingredient
-      )
-    );
-  };
-
-  const removeIngredientRow = (id: number) => {
-    setIngredients((prev) => prev.filter((ingredient) => ingredient.id !== id));
-  };
-
-  const addIngredientRow = () => {
-    // New id gets created based on previously highest id
-    const newId = ingredients.length
-      ? Math.max(...ingredients.map((i) => i.id)) + 1
-      : 1;
-    // New ingredient object gets added with the new id and empty values
-    setIngredients((prev) => [
-      ...prev,
-      { id: newId, name: "", amount: "", recipesId: 0 },
-    ]);
-  };
+  const [recipe, setRecipe] = useState(initialRecipe);
 
   function setProperty(event: React.ChangeEvent) {
     let { name, value }: { name: string; value: string | number } =
@@ -73,38 +39,142 @@ export default function EditRecipePage() {
     setRecipe({ ...recipe, [name]: value });
   }
 
+  // Tracks the status of each ingredient in the form
+  type IngredientStatus =
+    | "existing" //already exists in DB and unchanged
+    | "new" //just added in the form
+    | "updated" //existing ingredient which is modified
+    | "deleted"; //marked for removal
+
+  // Extends the Ingredient type to include a status for UI and DB operations
+  type IngredientWithStatus = Ingredient & {
+    status: IngredientStatus;
+  };
+
+  // Actions that can be dispatched to the ingredient reducer
+  type Action =
+    | { type: "add" }
+    | { type: "remove"; id: number }
+    | { type: "update"; id: number; field: "name" | "amount"; value: string }
+    | { type: "hydrate"; payload: Ingredient[] };
+
+  const [ingredients, dispatch] = useReducer(ingredientReducer, []);
+
+  //Reducer which manages the ingredient list in the form
+  function ingredientReducer(
+    state: IngredientWithStatus[],
+    action: Action
+  ): IngredientWithStatus[] {
+    switch (action.type) {
+      case "hydrate":
+        // Initializes ingriedients from the db and marks them as existing
+        return action.payload.map((i) => ({ ...i, status: "existing" }));
+
+      case "add":
+        // Generates a temporary ID (not db id) for new ingredient rows
+        const newId = state.length
+          ? Math.max(...state.map((i) => i.id)) + 1
+          : 1;
+        return [
+          ...state,
+          { id: newId, name: "", amount: "", recipesId: 0, status: "new" },
+        ];
+
+      case "remove":
+        //Marks a ingredient as deleted (gets removed from UI, may be deleted from the db)
+        return state.map((i) =>
+          i.id === action.id ? { ...i, status: "deleted" } : i
+        );
+
+      case "update":
+        //Updates a field of an ingredient
+        //If the ingredient already exists, mark it as updated
+        return state.map((i) =>
+          i.id === action.id
+            ? {
+                ...i,
+                [action.field]: action.value,
+                status: i.status === "existing" ? "updated" : i.status,
+              }
+            : i
+        );
+
+      default:
+        return state;
+    }
+  }
+
+  // when loader runs:
+  useEffect(() => {
+    dispatch({ type: "hydrate", payload: initialIngredients });
+  }, [initialIngredients]);
+
   async function sendForm(event: React.FormEvent) {
     event.preventDefault();
 
-    const payload: any = { ...recipe };
-
     // Uploads the recipe
-    const recipeResult = await fetch("/api/recipes", {
-      method: "POST",
+    await fetch(`/api/recipes/${recipe.id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(recipe),
     });
 
-    // Takes the recipe insertId and assigns it to recipeId
-    const recipeData = await recipeResult.json();
-    const recipeId = recipeData.insertId;
+    //Helper to get payload for DB
+    const getIngredientPayload = (ingredient: IngredientWithStatus) => ({
+      id: ingredient.id,
+      name: ingredient.name,
+      amount: ingredient.amount,
+      recipesId: initialRecipe.id,
+    });
 
-    // Uploads the ingredients if there are any
-    if (ingredients && ingredients.length > 0) {
-      // Updates the recipesId for all ingredients
-      const ingredientsWithRecipeId = ingredients.map((ingredient) => ({
-        ...ingredient,
-        recipesId: recipeId,
-      }));
+    for (const ingredient of ingredients) {
+      // Don't want to send the status of the ingredient to the db
+      const payload = getIngredientPayload(ingredient);
 
-      for (const ingredient of ingredientsWithRecipeId) {
+      if (ingredient.status === "new")
         await fetch("/api/ingredients", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(ingredient),
+          body: JSON.stringify(payload),
         });
-      }
+      else if (ingredient.status === "updated")
+        await fetch(`/api/ingredients/${payload.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      // Only delete if ingredient actually exists in database
+      else if (ingredient.status === "deleted" && payload.id > 0)
+        await fetch(`/api/ingredients/${payload.id}`, {
+          method: "DELETE",
+        });
     }
+    navigate("/my-recipes");
+  }
+
+  async function deleteRecipe() {
+    // //Deletes the recipes image file
+    await fetch(`/api/upload/${recipe.imagePath}`, {
+      method: "DELETE",
+    });
+
+    const response = await fetch(
+      `/api/ingredients?where=recipesId=${recipe.id}`
+    );
+
+    const ingredientsToDelete = await response.json();
+
+    //Deletes all the ingredients connected to the recipe
+    for (const ingredient of ingredientsToDelete) {
+      await fetch(`/api/ingredients/${ingredient.id}`, {
+        method: "DELETE",
+      });
+    }
+
+    //Deletes the recipe
+    await fetch(`/api/recipes/${initialRecipe.id}`, {
+      method: "DELETE",
+    });
 
     navigate("/my-recipes");
   }
@@ -181,54 +251,60 @@ export default function EditRecipePage() {
                   <div className="d-grid gap-2">
                     <Button
                       variant="primary"
-                      onClick={addIngredientRow}
+                      onClick={() => dispatch({ type: "add" })}
                       className="mt-2 mb-2"
                     >
                       + Add Ingredient
                     </Button>
                   </div>
 
-                  {ingredients.map((ingredient) => (
-                    <Row key={ingredient.id} className="mb-2 g-1 p-0 m-0">
-                      <Col xs={4}>
-                        <Form.Control
-                          type="text"
-                          placeholder="Amount"
-                          value={ingredient.amount}
-                          onChange={(e) =>
-                            handleIngredientChange(
-                              ingredient.id,
-                              "amount",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </Col>
-                      <Col xs={7}>
-                        <Form.Control
-                          required
-                          type="text"
-                          placeholder="Ingredient"
-                          value={ingredient.name}
-                          onChange={(e) =>
-                            handleIngredientChange(
-                              ingredient.id,
-                              "name",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </Col>
-                      <Col xs={1}>
-                        <Button
-                          variant="danger"
-                          onClick={() => removeIngredientRow(ingredient.id)}
-                        >
-                          X
-                        </Button>
-                      </Col>
-                    </Row>
-                  ))}
+                  {ingredients
+                    .filter((i) => i.status !== "deleted")
+                    .map((ingredient) => (
+                      <Row key={ingredient.id} className="mb-2 g-1 p-0 m-0">
+                        <Col xs={4}>
+                          <Form.Control
+                            type="text"
+                            placeholder="Amount"
+                            value={ingredient.amount}
+                            onChange={(e) =>
+                              dispatch({
+                                type: "update",
+                                id: ingredient.id,
+                                field: "amount",
+                                value: e.target.value,
+                              })
+                            }
+                          />
+                        </Col>
+                        <Col xs={7}>
+                          <Form.Control
+                            required
+                            type="text"
+                            placeholder="Ingredient"
+                            value={ingredient.name}
+                            onChange={(e) =>
+                              dispatch({
+                                type: "update",
+                                id: ingredient.id,
+                                field: "name",
+                                value: e.target.value,
+                              })
+                            }
+                          />
+                        </Col>
+                        <Col xs={1}>
+                          <Button
+                            variant="danger"
+                            onClick={() =>
+                              dispatch({ type: "remove", id: ingredient.id })
+                            }
+                          >
+                            X
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
                 </Form.Group>
                 <Row className="d-flex mt-5">
                   <Col xs={6}>
@@ -241,9 +317,7 @@ export default function EditRecipePage() {
                     </Button>
                   </Col>
                   <Col xs={6}>
-                    <Button variant="danger" className="w-100 fs-4">
-                      Delete recipe
-                    </Button>
+                    <ConfirmModal onConfirm={deleteRecipe} />
                   </Col>
                 </Row>
               </Form>
