@@ -1,5 +1,7 @@
 import ReactStars from "react-stars";
 
+//Might use later but put on hold for now
+
 interface StarRatingProps {
   value: number;
   count?: number;
@@ -12,7 +14,7 @@ const StarRating = ({
   value,
   count = 5,
   size = 24,
-  edit = false,
+  edit = true,
   onChange,
 }: StarRatingProps) => {
   return (

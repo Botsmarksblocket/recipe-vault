@@ -2,7 +2,6 @@ import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
-import StarRating from "../utils/reactStars";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
@@ -25,8 +24,7 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const { recipeName, description, imagePath, votes, instructions } = recipe;
-  const averageRating = recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0;
+  const { recipeName, description, imagePath, instructions } = recipe;
 
   return (
     <>
@@ -39,11 +37,8 @@ export default function RecipePage() {
                   <Card.Title className="fw-bold fs-2 mt-0 mt-md-3">
                     {recipeName}
                   </Card.Title>
-                  <div className="d-flex align-items-center">
-                    <StarRating value={averageRating} />
-                    <Card.Text className="ms-2">({votes})</Card.Text>
-                  </div>
-                  <Card.Text className="mt-2 mb-3">{description}</Card.Text>
+
+                  <Card.Text className="mt-3 mb-3">{description}</Card.Text>
                 </Col>
 
                 <Col xs={12} md={6}>

@@ -3,7 +3,6 @@ import RecipeCard from "../components/RecipeCard";
 import { useEffect, useState } from "react";
 import { createSlug } from "../utils/slug";
 import { Link } from "react-router-dom";
-
 import { Row, Col, Button, Spinner } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 
@@ -29,11 +28,6 @@ export default function UsersRecipesPage() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  const recipesWithRating = recipes.map((recipe) => ({
-    ...recipe,
-    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
-  }));
-
   return (
     <>
       <Row>
@@ -46,8 +40,8 @@ export default function UsersRecipesPage() {
           <Col className="text-center">
             <Spinner className="mt-5"></Spinner>
           </Col>
-        ) : recipesWithRating.length > 0 ? (
-          recipesWithRating.map((recipe) => (
+        ) : recipes.length > 0 ? (
+          recipes.map((recipe) => (
             <Col
               xs={12}
               sm={6}
@@ -61,7 +55,9 @@ export default function UsersRecipesPage() {
               </div>
 
               <Link
-                to={`/edit-recipe/${recipe.id}/${createSlug(recipe.recipeName)}`}
+                to={`/edit-recipe/${recipe.id}/${createSlug(
+                  recipe.recipeName
+                )}`}
                 style={{ textDecoration: "none" }}
               >
                 <Button className="mt-1 mb-3 w-100">Edit recipe</Button>

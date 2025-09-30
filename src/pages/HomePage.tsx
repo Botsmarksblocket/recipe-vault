@@ -19,11 +19,6 @@ export default function HomePage() {
     recipes: Recipe[];
   } = useLoaderData();
 
-  const recipesWithRating = recipes.map((recipe) => ({
-    ...recipe,
-    averageRating: recipe.votes > 0 ? recipe.sumRating / recipe.votes : 0,
-  }));
-
   return (
     <>
       <Row>
@@ -32,7 +27,7 @@ export default function HomePage() {
         </Col>
       </Row>
       <Row>
-        {recipesWithRating.map((recipe) => (
+        {recipes.map((recipe) => (
           <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
             <RecipeCard recipe={recipe} />
           </Col>
