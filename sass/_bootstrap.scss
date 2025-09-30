@@ -63,3 +63,17 @@ $warning: #ffc107;
 .form-label {
   color: var(--text-color);
 }
+
+.dropdown-menu {
+  background-color: var(--card-background-color);
+}
+.dropdown-item {
+  background-color: var(--card-background-color);
+  color: var(--text-color);
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: var(--highlight-dropdown);
+  color: var(--text-color);
+}
