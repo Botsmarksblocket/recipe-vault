@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { DarkModeToggle } from "../parts/DarkModeToggle";
 import { useAuth } from "../context/AuthProvider";
+import type Recipe from "../interfaces/Recipe";
 import routes from "../routes";
 
 export default function Header() {
@@ -30,10 +31,19 @@ export default function Header() {
     path === currentRoute?.path || path === currentRoute?.parent;
 
   const [searchText, setSearch] = useState("");
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
 
-  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     let { value } = event.target;
     setSearch(value);
+
+    const response = await fetch(
+      `/api/recipes?where=recipeName_LIKE_%${searchText}%&orderby=recipeName&limit=4`,
+      {
+        method: "GET",
+      }
+    );
+    setSearchedRecipes(await response.json());
   }
 
   return (
@@ -65,7 +75,7 @@ export default function Header() {
 
             <Form className=" mx-xxl-auto header-search-bar">
               <Dropdown
-                show={searchText.length > 0 && searchText.trim() !== ""}
+                show={searchText.length > 0 && searchedRecipes.length > 0}
               >
                 <Dropdown.Toggle as="div" bsPrefix="p-0">
                   <Form.Control
@@ -78,8 +88,9 @@ export default function Header() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ width: "100%" }}>
-                  {/* Map filtered results  */}
-                  <Dropdown.Item>{searchText}</Dropdown.Item>
+                  {searchedRecipes.map((r, i) => (
+                    <Dropdown.Item key={i}>{r.recipeName}</Dropdown.Item>
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
             </Form>
