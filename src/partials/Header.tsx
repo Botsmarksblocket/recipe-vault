@@ -21,6 +21,13 @@ export default function Header() {
   const isActive = (path: string) =>
     path === currentRoute?.path || path === currentRoute?.parent;
 
+  const [searchText, setSearch] = useState("");
+
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    let { value } = event.target;
+    setSearch(value);
+  }
+
   return (
     <header>
       <Navbar expand="lg" expanded={expanded} fixed="top">
@@ -53,16 +60,21 @@ export default function Header() {
                 Welcome {user?.firstName}
               </h3>
             )}
+
             <Form className="d-flex align-items-center">
               <Form.Control
-                type="search"
+                type="text"
+                value={searchText}
+                name="search"
                 placeholder="Search recipe"
                 className="me-3"
                 aria-label="Search"
+                onChange={handleSearch}
               />
-              <Button size="sm" className="me-3">
+
+              {/* <Button size="sm" className="me-3">
                 Search
-              </Button>
+              </Button> */}
             </Form>
             <div className="mt-2 mt-lg-0">
               <DarkModeToggle />
