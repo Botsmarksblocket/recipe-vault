@@ -1,7 +1,6 @@
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
-import StarRating from "../utils/reactStars";
 import { createSlug } from "../utils/slug";
 import "../components/RecipeCard.scss";
 
@@ -12,8 +11,7 @@ function truncateText(text: string, maxLength: number): string {
 }
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
-  const { id, recipeName, description, votes, sumRating, imagePath } = recipe;
-  const averageRating = votes > 0 ? sumRating / votes : 0;
+  const { id, recipeName, description, imagePath } = recipe;
 
   return (
     <Link
@@ -31,13 +29,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
               />
             </div>
           )}
-
-          <div className="d-flex align-items-center mt-2">
-            <StarRating value={averageRating} />
-            <Card.Text className="ms-2">({votes})</Card.Text>
-          </div>
-
-          <Card.Title className="fw-bold fs-6">{recipeName}</Card.Title>
+          <Card.Title className="fw-bold fs-5 mt-2">{recipeName}</Card.Title>
           <Card.Text>{truncateText(description, 100)}</Card.Text>
         </Card.Body>
       </Card>
