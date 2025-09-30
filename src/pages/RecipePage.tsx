@@ -2,7 +2,6 @@ import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
-import StarRating from "../utils/reactStars";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
