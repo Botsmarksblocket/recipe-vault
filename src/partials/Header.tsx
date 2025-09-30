@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Form, Button } from "react-bootstrap";
+import "./Header.scss";
+import {
+  Container,
+  Nav,
+  Navbar,
+  Form,
+  Button,
+  Dropdown,
+} from "react-bootstrap";
 import { DarkModeToggle } from "../parts/DarkModeToggle";
 import { useAuth } from "../context/AuthProvider";
 import routes from "../routes";
@@ -30,7 +38,7 @@ export default function Header() {
 
   return (
     <header>
-      <Navbar expand="lg" expanded={expanded} fixed="top">
+      <Navbar expand="xxl" expanded={expanded} fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-2" as={Link} to="/">
             Recipe vault
@@ -38,7 +46,7 @@ export default function Header() {
 
           <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto fs-5">
+            <Nav className="fs-5">
               {routes
                 .filter((x) => x.menuLabel && (!x.requiresAuth || user))
                 .map(({ menuLabel, path }, i) => (
@@ -54,28 +62,34 @@ export default function Header() {
                   </Nav.Link>
                 ))}
             </Nav>
-            {/* Search */}
+
+            <Form className=" mx-xxl-auto header-search-bar">
+              <Dropdown
+                show={searchText.length > 0 && searchText.trim() !== ""}
+              >
+                <Dropdown.Toggle as="div" bsPrefix="p-0">
+                  <Form.Control
+                    type="text"
+                    value={searchText}
+                    placeholder="Search recipe"
+                    aria-label="Search"
+                    onChange={handleSearch}
+                  />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu style={{ width: "100%" }}>
+                  {/* Map filtered results  */}
+                  <Dropdown.Item>{searchText}</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Form>
+
             {user && (
-              <h3 className="me-4 d-none d-lg-block">
+              <h3 className="ms-2 me-4 d-none d-lg-block">
                 Welcome {user?.firstName}
               </h3>
             )}
 
-            <Form className="d-flex align-items-center">
-              <Form.Control
-                type="text"
-                value={searchText}
-                name="search"
-                placeholder="Search recipe"
-                className="me-3"
-                aria-label="Search"
-                onChange={handleSearch}
-              />
-
-              {/* <Button size="sm" className="me-3">
-                Search
-              </Button> */}
-            </Form>
             <div className="mt-2 mt-lg-0">
               <DarkModeToggle />
               {user ? (
