@@ -1,7 +1,8 @@
-import { useLoaderData } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
+import MealTypeBadge from "../components/MealTypeBadge";
 import { Row, Col, Card, ListGroup } from "react-bootstrap";
+import { useLoaderData } from "react-router-dom";
 
 RecipePage.route = {
   path: "/recipe/:id/:slug",
@@ -24,7 +25,8 @@ export default function RecipePage() {
     ingredients: Ingredient[];
   } = useLoaderData();
 
-  const { recipeName, description, imagePath, instructions } = recipe;
+  const { recipeName, description, imagePath, instructions, mealTypeId } =
+    recipe;
 
   return (
     <>
@@ -37,6 +39,8 @@ export default function RecipePage() {
                   <Card.Title className="fw-bold fs-2 mt-0 mt-md-3">
                     {recipeName}
                   </Card.Title>
+
+                  <MealTypeBadge mealTypeId={mealTypeId} />
 
                   <Card.Text className="mt-3 mb-3">{description}</Card.Text>
                 </Col>
@@ -54,7 +58,7 @@ export default function RecipePage() {
                 </Col>
 
                 <Col xs={12} md={6} className="ps-4 pe-4">
-                  <Card.Text className="fs-2 mt-2">Ingredienser</Card.Text>
+                  <Card.Text className="fs-2 mt-2">Ingredients</Card.Text>
                   <ListGroup variant="flush">
                     {ingredients.map((ingredient) => (
                       <ListGroup.Item
@@ -70,7 +74,7 @@ export default function RecipePage() {
                   </ListGroup>
                 </Col>
                 <Col xs={12} md={6} className="d-flex flex-column ps-4 pe-4 ">
-                  <Card.Text className="fs-2 mt-2">Instruktioner</Card.Text>
+                  <Card.Text className="fs-2 mt-2">Instructions</Card.Text>
 
                   <Card.Text>{instructions}</Card.Text>
                 </Col>
