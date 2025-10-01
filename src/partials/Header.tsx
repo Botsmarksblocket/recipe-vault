@@ -8,6 +8,9 @@ import {
   Form,
   Button,
   Dropdown,
+  Image,
+  Row,
+  Col,
 } from "react-bootstrap";
 import { DarkModeToggle } from "../parts/DarkModeToggle";
 import { useAuth } from "../context/AuthProvider";
@@ -38,6 +41,7 @@ export default function Header() {
   }
 
   useEffect(() => {
+    if (!searchText) return;
     async function fetchData() {
       const response = await fetch(
         `/api/recipes?where=recipeNameLIKE%${searchText}%&orderby=recipeName&limit=4`
@@ -90,7 +94,19 @@ export default function Header() {
 
                 <Dropdown.Menu style={{ width: "100%" }}>
                   {searchedRecipes.map((r, i) => (
-                    <Dropdown.Item key={i}>{r.recipeName} </Dropdown.Item>
+                    <Dropdown.Item key={i} className="fw-bold">
+                      <Row className="d-flex justify-content-start ">
+                        <Col xs="auto">
+                          <Image
+                            className="image-search"
+                            src={`/backend/wwwroot/uploads/${r.imagePath}`}
+                          />
+                        </Col>
+                        <Col className="align-self-center">
+                          <Form.Text>{r.recipeName}</Form.Text>
+                        </Col>
+                      </Row>
+                    </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
