@@ -15,6 +15,7 @@ import {
 import { DarkModeToggle } from "../parts/DarkModeToggle";
 import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
+import { createSlug } from "../utils/slug";
 import routes from "../routes";
 
 export default function Header() {
@@ -95,17 +96,24 @@ export default function Header() {
                 <Dropdown.Menu style={{ width: "100%" }}>
                   {searchedRecipes.map((r, i) => (
                     <Dropdown.Item key={i} className="fw-bold">
-                      <Row className="d-flex justify-content-start ">
-                        <Col xs="auto">
-                          <Image
-                            className="image-search"
-                            src={`/backend/wwwroot/uploads/${r.imagePath}`}
-                          />
-                        </Col>
-                        <Col className="align-self-center">
-                          <Form.Text>{r.recipeName}</Form.Text>
-                        </Col>
-                      </Row>
+                      <Link
+                        to={`/recipe/${r.id}/${createSlug(r.recipeName)}`}
+                        style={{ textDecoration: "none" }}
+                        onClick={() => setSearch("")}
+                      >
+                        <Row className="d-flex justify-content-start ">
+                          <Col xs="auto">
+                            {/* TODO: Update for production */}
+                            <Image
+                              className="image-search"
+                              src={`/backend/wwwroot/uploads/${r.imagePath}`}
+                            />
+                          </Col>
+                          <Col className="align-self-center">
+                            <Form.Text>{r.recipeName}</Form.Text>
+                          </Col>
+                        </Row>
+                      </Link>
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
