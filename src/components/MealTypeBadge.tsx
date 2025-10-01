@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import type MealType from "../interfaces/MealType";
 
-export default function MealTypeBadge({ mealTypeId }: { mealTypeId: number }) {
+type Props = {
+  mealTypeId: number;
+  fontSizeClass?: string;
+};
+
+export default function MealTypeBadge({
+  mealTypeId,
+  fontSizeClass = "fs-6",
+}: Props) {
   const [mealType, setMealType] = useState<MealType>();
 
   useEffect(() => {
@@ -11,5 +19,5 @@ export default function MealTypeBadge({ mealTypeId }: { mealTypeId: number }) {
       .then((data) => setMealType(data));
   }, [mealTypeId]);
 
-  return <Badge className="fs-6">{mealType?.type}</Badge>;
+  return <Badge className={fontSizeClass}>{mealType?.type}</Badge>;
 }

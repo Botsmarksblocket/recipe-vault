@@ -31,7 +31,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             </div>
           )}
           <Card.Title className="fw-bold fs-5 mt-2">{recipeName}</Card.Title>
-          <MealTypeBadge mealTypeId={recipe.mealTypeId} />
+          <MealTypeBadge mealTypeId={recipe.mealTypeId} fontSizeClass="fs-6" />
           <Card.Text>{truncateText(description, 100)}</Card.Text>
         </Card.Body>
       </Card>

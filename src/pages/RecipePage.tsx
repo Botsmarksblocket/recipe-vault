@@ -40,7 +40,7 @@ export default function RecipePage() {
                     {recipeName}
                   </Card.Title>
 
-                  <MealTypeBadge mealTypeId={mealTypeId} />
+                  <MealTypeBadge mealTypeId={mealTypeId} fontSizeClass="fs-5" />
 
                   <Card.Text className="mt-3 mb-3">{description}</Card.Text>
                 </Col>
