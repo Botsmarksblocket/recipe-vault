@@ -110,7 +110,9 @@ export default function Header() {
                             />
                           </Col>
                           <Col className="align-self-center">
-                            <Form.Text>{r.recipeName}</Form.Text>
+                            <Form.Text className="text-wrap">
+                              {r.recipeName}
+                            </Form.Text>
                           </Col>
                         </Row>
                       </Link>
