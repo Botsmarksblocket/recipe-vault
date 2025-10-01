@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Header.scss";
 import {
@@ -34,17 +34,18 @@ export default function Header() {
   const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
 
   async function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
-    let { value } = event.target;
-    setSearch(value);
-
-    const response = await fetch(
-      `/api/recipes?where=recipeName_LIKE_%${searchText}%&orderby=recipeName&limit=4`,
-      {
-        method: "GET",
-      }
-    );
-    setSearchedRecipes(await response.json());
+    setSearch(event.target.value);
   }
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(
+        `/api/recipes?where=recipeNameLIKE%${searchText}%&orderby=recipeName&limit=4`
+      );
+      setSearchedRecipes(await response.json());
+    }
+    fetchData();
+  }, [searchText]);
 
   return (
     <header>
@@ -89,7 +90,7 @@ export default function Header() {
 
                 <Dropdown.Menu style={{ width: "100%" }}>
                   {searchedRecipes.map((r, i) => (
-                    <Dropdown.Item key={i}>{r.recipeName}</Dropdown.Item>
+                    <Dropdown.Item key={i}>{r.recipeName} </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
