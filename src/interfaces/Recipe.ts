@@ -7,5 +7,6 @@ export default interface Recipe {
   description: string;
   imagePath: number;
   instructions: string;
+  mealTypeId: number;
   ingredients?: Ingredient[];
 }

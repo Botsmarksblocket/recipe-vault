@@ -2,7 +2,8 @@ import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import { v4 as uuidv4 } from "uuid";
 import type Ingredient from "../interfaces/Ingredient";
-import { useNavigate } from "react-router-dom";
+import type MealType from "../interfaces/MealType";
+import { useNavigate, useLoaderData } from "react-router-dom";
 import { useState } from "react";
 
 CreateRecipePage.route = {
@@ -10,9 +11,18 @@ CreateRecipePage.route = {
   menuLabel: "Create recipe",
   requiresAuth: true,
   index: 3,
+  loader: async () => ({
+    mealType: await (await fetch("/api/mealType")).json(),
+  }),
 };
 
 export default function CreateRecipePage() {
+  const {
+    mealType,
+  }: {
+    mealType: MealType[];
+  } = useLoaderData();
+
   const { user } = useAuth();
   const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
@@ -23,6 +33,7 @@ export default function CreateRecipePage() {
     description: "",
     imagePath: "",
     instructions: "",
+    mealTypeId: "",
   });
 
   // Starts with one ingredient with empty fields
@@ -176,6 +187,22 @@ export default function CreateRecipePage() {
                     Instructions must be between 50 - 1000 letters.
                   </Form.Text>
                 </Form.Group>
+
+                <Form.Group>
+                  <Form.Label className="fs-5">Meal type</Form.Label>
+                  <Form.Select
+                    required
+                    name="mealTypeId"
+                    onChange={setProperty}
+                  >
+                    {mealType.map((i) => (
+                      <option key={i.id} value={i.id}>
+                        {i.type}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+
                 <Form.Group className="mt-4">
                   <Form.Label className="fs-5">Ingredients</Form.Label>
 
