@@ -78,3 +78,8 @@ $warning: #ffc107;
   background-color: var(--navbar-color);
   color: var(--text-color);
 }
+
+.badge.bg-primary {
+  background-color: var(--badge-bg-color) !important;
+  color: var(--text-color);
+}
