@@ -1,6 +1,6 @@
-$primary: #1f8bacc5;
+$primary: rgb(235, 221, 221);
 $secondary: #ff6f61;
-$success: #28a745;
+$success: #19da43;
 $danger: #dc3545;
 $info: #17a2b8;
 $warning: #ffc107;
@@ -82,4 +82,18 @@ $warning: #ffc107;
 .badge.bg-primary {
   background-color: var(--badge-bg-color) !important;
   color: var(--text-color);
+}
+
+.btn {
+  border-color: var(--btn-border-color);
+}
+
+.btn.btn-primary {
+  background-color: var(--primary-btn-color);
+  color: var(--text-color);
+}
+
+.form-control,
+.form-select {
+  background-color: var(--form-background-color);
 }

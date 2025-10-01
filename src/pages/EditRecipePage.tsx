@@ -326,7 +326,7 @@ export default function EditRecipePage() {
                       </Row>
                     ))}
                 </Form.Group>
-                <Row className="d-flex mt-5">
+                <Row className="d-flex mt-4">
                   <Col xs={6}>
                     <Button
                       type="submit"

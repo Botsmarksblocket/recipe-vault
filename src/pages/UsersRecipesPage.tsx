@@ -59,7 +59,7 @@ export default function UsersRecipesPage() {
                 )}`}
                 style={{ textDecoration: "none" }}
               >
-                <Button className="mt-1 mb-3 w-100">Edit recipe</Button>
+                <Button className="mt-1 mb-3 w-100 fw-bold">Edit recipe</Button>
               </Link>
             </Col>
           ))
