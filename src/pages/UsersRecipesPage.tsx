@@ -67,9 +67,11 @@ export default function UsersRecipesPage() {
         ) : (
           <Col className="d-flex flex-column justify-content-center align-items-center">
             <h4 className="mt-3">You haven't created any recipes yet...</h4>
-            <Button size="lg" variant="success" className="mt-3">
-              Click here to start creating!
-            </Button>
+            <Link to="/create-recipe" style={{ textDecoration: "none" }}>
+              <Button size="lg" variant="success" className="mt-3">
+                Click here to start creating!
+              </Button>
+            </Link>
           </Col>
         )}
       </Row>

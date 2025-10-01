@@ -2,6 +2,8 @@ import { Row, Col, Form, Card, Button } from "react-bootstrap";
 // import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
+import type MealType from "../interfaces/MealType";
+
 import ConfirmModal from "../components/ConfirmModal";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import { useState, useReducer, useEffect } from "react";
@@ -12,11 +14,12 @@ EditRecipePage.route = {
   index: 3,
   loader: async ({ params }: { params: any }) => {
     const { id } = params!;
+    const mealType = await (await fetch(`/api/mealType`)).json();
     const recipe = await (await fetch(`/api/recipes/${id}`)).json();
     const ingredients = await (
       await fetch(`/api/ingredients/?where=recipesId=${id}`)
     ).json();
-    return { recipe, ingredients };
+    return { recipe, ingredients, mealType };
   },
 };
 
@@ -24,9 +27,11 @@ export default function EditRecipePage() {
   const {
     recipe: initialRecipe,
     ingredients: initialIngredients,
+    mealType,
   }: {
     recipe: Recipe;
     ingredients: Ingredient[];
+    mealType: MealType[];
   } = useLoaderData();
 
   const navigate = useNavigate();
@@ -244,6 +249,21 @@ export default function EditRecipePage() {
                   <Form.Text id="instructionsHelpBlock" className="fst-italic">
                     Instructions must be between 50 - 1000 letters.
                   </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className="fs-5">Meal type</Form.Label>
+                  <Form.Select
+                    required
+                    name="mealTypeId"
+                    onChange={setProperty}
+                    value={recipe.mealTypeId}
+                  >
+                    {mealType.map((i) => (
+                      <option key={i.id} value={i.id}>
+                        {i.type}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
                 <Form.Group className="mt-4">
                   <Form.Label className="fs-5">Ingredients</Form.Label>

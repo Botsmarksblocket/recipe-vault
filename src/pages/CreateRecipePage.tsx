@@ -194,7 +194,11 @@ export default function CreateRecipePage() {
                     required
                     name="mealTypeId"
                     onChange={setProperty}
+                    defaultValue=""
                   >
+                    <option value="" disabled>
+                      -- Select a meal type --
+                    </option>
                     {mealType.map((i) => (
                       <option key={i.id} value={i.id}>
                         {i.type}
