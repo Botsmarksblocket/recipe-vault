@@ -1,8 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Form, Button } from "react-bootstrap";
+import "./Header.scss";
+import {
+  Container,
+  Nav,
+  Navbar,
+  Form,
+  Button,
+  Dropdown,
+  Image,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { DarkModeToggle } from "../parts/DarkModeToggle";
 import { useAuth } from "../context/AuthProvider";
+import type Recipe from "../interfaces/Recipe";
+import { createSlug } from "../utils/slug";
 import routes from "../routes";
 
 export default function Header() {
@@ -21,9 +34,27 @@ export default function Header() {
   const isActive = (path: string) =>
     path === currentRoute?.path || path === currentRoute?.parent;
 
+  const [searchText, setSearch] = useState("");
+  const [searchedRecipes, setSearchedRecipes] = useState<Recipe[]>([]);
+
+  async function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value);
+  }
+
+  useEffect(() => {
+    if (!searchText) return;
+    async function fetchData() {
+      const response = await fetch(
+        `/api/recipes?where=recipeNameLIKE%${searchText}%&orderby=recipeName&limit=4`
+      );
+      setSearchedRecipes(await response.json());
+    }
+    fetchData();
+  }, [searchText]);
+
   return (
     <header>
-      <Navbar expand="lg" expanded={expanded} fixed="top">
+      <Navbar expand="xxl" expanded={expanded} fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-2" as={Link} to="/">
             Recipe vault
@@ -31,7 +62,7 @@ export default function Header() {
 
           <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto fs-5">
+            <Nav className="fs-5">
               {routes
                 .filter((x) => x.menuLabel && (!x.requiresAuth || user))
                 .map(({ menuLabel, path }, i) => (
@@ -47,23 +78,56 @@ export default function Header() {
                   </Nav.Link>
                 ))}
             </Nav>
-            {/* Search */}
+
+            <Form className=" mx-xxl-auto header-search-bar">
+              <Dropdown
+                show={searchText.length > 0 && searchedRecipes.length > 0}
+              >
+                <Dropdown.Toggle as="div" bsPrefix="p-0">
+                  <Form.Control
+                    type="text"
+                    value={searchText}
+                    placeholder="Search recipe"
+                    aria-label="Search"
+                    onChange={handleSearch}
+                  />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu style={{ width: "100%" }}>
+                  {searchedRecipes.map((r, i) => (
+                    <Dropdown.Item key={i} className="fw-bold">
+                      <Link
+                        to={`/recipe/${r.id}/${createSlug(r.recipeName)}`}
+                        style={{ textDecoration: "none" }}
+                        onClick={() => setSearch("")}
+                      >
+                        <Row className="d-flex justify-content-start ">
+                          <Col xs="auto">
+                            {/* TODO: Update for production */}
+                            <Image
+                              className="image-search"
+                              src={`/backend/wwwroot/uploads/${r.imagePath}`}
+                            />
+                          </Col>
+                          <Col className="align-self-center">
+                            <Form.Text className="text-wrap">
+                              {r.recipeName}
+                            </Form.Text>
+                          </Col>
+                        </Row>
+                      </Link>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Form>
+
             {user && (
-              <h3 className="me-4 d-none d-lg-block">
+              <h3 className="ms-2 me-4 d-none d-lg-block">
                 Welcome {user?.firstName}
               </h3>
             )}
-            <Form className="d-flex align-items-center">
-              <Form.Control
-                type="search"
-                placeholder="Search recipe"
-                className="me-3"
-                aria-label="Search"
-              />
-              <Button size="sm" className="me-3">
-                Search
-              </Button>
-            </Form>
+
             <div className="mt-2 mt-lg-0">
               <DarkModeToggle />
               {user ? (

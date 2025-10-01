@@ -43,7 +43,7 @@ $warning: #ffc107;
 }
 
 .card {
-  background-color: var(--card-background-color) !important;
+  background-color: var(--card-bg-color) !important;
 }
 
 .card-text,
@@ -61,5 +61,20 @@ $warning: #ffc107;
 }
 
 .form-label {
+  color: var(--text-color);
+}
+
+.dropdown-menu {
+  background-color: var(--dropdown-bg-color);
+}
+
+.dropdown-item {
+  background-color: var(--dropdown-bg-color);
+  color: var(--text-color);
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: var(--navbar-color);
   color: var(--text-color);
 }

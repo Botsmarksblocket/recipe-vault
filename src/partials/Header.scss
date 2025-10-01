@@ -1,0 +1,11 @@
+.header-search-bar {
+  width: 100%;
+
+  @media (min-width: 1400px) {
+    width: 440px;
+  }
+}
+
+.image-search {
+  width: 50px;
+}
