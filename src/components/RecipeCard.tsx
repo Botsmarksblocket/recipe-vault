@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import type Recipe from "../interfaces/Recipe";
 import { createSlug } from "../utils/slug";
 import "../components/RecipeCard.scss";
+import MealTypeBadge from "./MealTypeBadge";
 
 function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
@@ -30,6 +31,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             </div>
           )}
           <Card.Title className="fw-bold fs-5 mt-2">{recipeName}</Card.Title>
+          <MealTypeBadge mealTypeId={recipe.mealTypeId} fontSizeClass="fs-6" />
           <Card.Text>{truncateText(description, 100)}</Card.Text>
         </Card.Body>
       </Card>

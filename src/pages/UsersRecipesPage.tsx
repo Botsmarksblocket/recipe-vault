@@ -21,7 +21,6 @@ export default function UsersRecipesPage() {
   useEffect(() => {
     if (!user?.id) return;
 
-    // TODO: Hardcoded localhost to bypass proxy issues. In production, replace with a relative URL (`/api/...`) or use env variable
     fetch(`api/recipes/?where=createdBy=${user.id}`)
       .then((res) => res.json())
       .then((data) => setRecipes(data))
@@ -60,16 +59,18 @@ export default function UsersRecipesPage() {
                 )}`}
                 style={{ textDecoration: "none" }}
               >
-                <Button className="mt-1 mb-3 w-100">Edit recipe</Button>
+                <Button className="mt-1 mb-3 w-100 fw-bold">Edit recipe</Button>
               </Link>
             </Col>
           ))
         ) : (
           <Col className="d-flex flex-column justify-content-center align-items-center">
             <h4 className="mt-3">You haven't created any recipes yet...</h4>
-            <Button size="lg" variant="success" className="mt-3">
-              Click here to start creating!
-            </Button>
+            <Link to="/create-recipe" style={{ textDecoration: "none" }}>
+              <Button size="lg" variant="success" className="mt-3">
+                Click here to start creating!
+              </Button>
+            </Link>
           </Col>
         )}
       </Row>
