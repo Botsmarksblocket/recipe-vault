@@ -12,7 +12,7 @@ CreateRecipePage.route = {
   requiresAuth: true,
   index: 3,
   loader: async () => ({
-    mealType: await (await fetch("/api/mealType")).json(),
+    mealType: await (await fetch("/api/mealTypes")).json(),
   }),
 };
 

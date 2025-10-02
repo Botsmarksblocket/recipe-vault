@@ -1,23 +1,44 @@
 import type Recipe from "../interfaces/Recipe";
+import type MealType from "../interfaces/MealType";
+
 import RecipeCard from "../components/RecipeCard";
 import { Row, Col, Card, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
 
 HomePage.route = {
   path: "/",
   menuLabel: "Home page",
   index: 1,
-  loader: async () => ({
+  loader: async (): Promise<HomeLoaderData> => ({
     recipes: await (await fetch("/api/recipes")).json(),
+    mealType: await (await fetch("/api/mealTypes")).json(),
+    user: await (await fetch("/api/publicUserNames")).json(),
   }),
 };
 
+interface PublicUserNames {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+interface HomeLoaderData {
+  recipes: Recipe[];
+  mealType: MealType[];
+  user: PublicUserNames[];
+}
+
 export default function HomePage() {
   const {
-    recipes,
-  }: {
-    recipes: Recipe[];
-  } = useLoaderData();
+    recipes: initialRecipes,
+    mealType: initialMealTypes,
+    user: initialUser,
+  } = useLoaderData<HomeLoaderData>();
+
+  const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
+  const [mealTypes, setMealTypes] = useState<MealType[]>(initialMealTypes);
+  const [users, setUsers] = useState<PublicUserNames[]>(initialUser);
 
   return (
     <>
@@ -31,24 +52,27 @@ export default function HomePage() {
         <Card.Title className="fs-3 ms-3 mt-2">Filter recipes</Card.Title>
         <Card.Body>
           <Form>
-            <Row className="d-flex justify-content-center">
+            <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select>
-                  <option value="">Filter by meal type</option>
-                  <option value="typ1">Typ 1</option>
+                  {mealTypes.map((m) => (
+                    <option key={m.id}>{m.type}</option>
+                  ))}
                 </Form.Select>
               </Col>
               <Col xs={6}>
                 <Form.Select>
-                  <option value="">Filter by creator</option>
-                  <option value="typ1">Typ 1</option>
+                  {users.map((u) => (
+                    <option key={u.id}>
+                      {u.firstName} {u.lastName}
+                    </option>
+                  ))}
                 </Form.Select>
               </Col>
             </Row>
           </Form>
         </Card.Body>
       </Card>
-
       <Row>
         {recipes.map((recipe) => (
           <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>

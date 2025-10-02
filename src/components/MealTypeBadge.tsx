@@ -14,7 +14,7 @@ export default function MealTypeBadge({
   const [mealType, setMealType] = useState<MealType>();
 
   useEffect(() => {
-    fetch(`/api/mealType/${mealTypeId}`)
+    fetch(`/api/mealTypes/${mealTypeId}`)
       .then((res) => res.json())
       .then((data) => setMealType(data));
   }, [mealTypeId]);
