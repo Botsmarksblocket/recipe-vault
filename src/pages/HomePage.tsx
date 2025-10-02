@@ -60,24 +60,30 @@ export default function HomePage() {
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select
-                  value={selectedMealType ?? ""}
-                  onChange={(e) => setSelectedMealType(Number(e.target.value))}
+                  onChange={(e) =>
+                    setSelectedMealType(
+                      e.target.value === "" ? null : Number(e.target.value)
+                    )
+                  }
                 >
-                  <option value="">Meal type</option>
+                  <option value="">-- Meal type --</option>
 
                   {mealTypes.map((m) => (
                     <option key={m.id} value={m.id}>
-                      {m.type}
+                      {m.type} {}
                     </option>
                   ))}
                 </Form.Select>
               </Col>
               <Col xs={6}>
                 <Form.Select
-                  value={selectedUser ?? ""}
-                  onChange={(e) => setSelectedUser(Number(e.target.value))}
+                  onChange={(e) =>
+                    setSelectedUser(
+                      e.target.value === "" ? null : Number(e.target.value)
+                    )
+                  }
                 >
-                  <option value="">Recipe creator</option>
+                  <option value="">-- Recipe creator --</option>
                   {users.map((u) => (
                     <option key={u.id} value={u.id}>
                       {u.firstName} {u.lastName}
