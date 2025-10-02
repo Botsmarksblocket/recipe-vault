@@ -41,6 +41,7 @@ export default function HomePage() {
   const [users, setUsers] = useState<PublicUserNames[]>(initialUser);
 
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [selectedMealType, setSelectedMealType] = useState<number | null>(null);
 
   console.log(selectedUser);
 
@@ -58,10 +59,14 @@ export default function HomePage() {
           <Form>
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
-                <Form.Select>
-                  <option>Meal type</option>
+                <Form.Select
+                  value={selectedMealType ?? ""}
+                  onChange={(e) => setSelectedMealType(Number(e.target.value))}
+                >
+                  <option value="">Meal type</option>
+
                   {mealTypes.map((m) => (
-                    <option key={m.id} value={m.type}>
+                    <option key={m.id} value={m.id}>
                       {m.type}
                     </option>
                   ))}
@@ -87,6 +92,7 @@ export default function HomePage() {
       <Row>
         {recipes
           .filter((r) => !selectedUser || r.createdBy === selectedUser)
+          .filter((r) => !selectedMealType || r.mealTypeId === selectedMealType)
 
           .map((recipe) => (
             <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
