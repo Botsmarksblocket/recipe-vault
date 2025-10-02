@@ -40,6 +40,10 @@ export default function HomePage() {
   const [mealTypes, setMealTypes] = useState<MealType[]>(initialMealTypes);
   const [users, setUsers] = useState<PublicUserNames[]>(initialUser);
 
+  const [selectedUser, setSelectedUser] = useState<number | null>(null);
+
+  console.log(selectedUser);
+
   return (
     <>
       <Row>
@@ -55,15 +59,22 @@ export default function HomePage() {
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select>
+                  <option>Meal type</option>
                   {mealTypes.map((m) => (
-                    <option key={m.id}>{m.type}</option>
+                    <option key={m.id} value={m.type}>
+                      {m.type}
+                    </option>
                   ))}
                 </Form.Select>
               </Col>
               <Col xs={6}>
-                <Form.Select>
+                <Form.Select
+                  value={selectedUser ?? ""}
+                  onChange={(e) => setSelectedUser(Number(e.target.value))}
+                >
+                  <option value="">Recipe creator</option>
                   {users.map((u) => (
-                    <option key={u.id}>
+                    <option key={u.id} value={u.id}>
                       {u.firstName} {u.lastName}
                     </option>
                   ))}
@@ -74,11 +85,14 @@ export default function HomePage() {
         </Card.Body>
       </Card>
       <Row>
-        {recipes.map((recipe) => (
-          <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
-            <RecipeCard recipe={recipe} />
-          </Col>
-        ))}
+        {recipes
+          .filter((r) => !selectedUser || r.createdBy === selectedUser)
+
+          .map((recipe) => (
+            <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
+              <RecipeCard recipe={recipe} />
+            </Col>
+          ))}
       </Row>
     </>
   );
