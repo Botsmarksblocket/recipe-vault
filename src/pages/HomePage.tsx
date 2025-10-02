@@ -1,10 +1,10 @@
 import type Recipe from "../interfaces/Recipe";
 import type MealType from "../interfaces/MealType";
-
+import type Ingredient from "../interfaces/Ingredient";
 import RecipeCard from "../components/RecipeCard";
-import { Row, Col, Card, Form } from "react-bootstrap";
+import { Row, Col, Card, Form, Dropdown } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 HomePage.route = {
   path: "/",
@@ -43,7 +43,25 @@ export default function HomePage() {
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<number | null>(null);
 
-  console.log(selectedUser);
+  const [searchText, setSearch] = useState("");
+  const [searchedIngredients, setSearchedIngredients] = useState<Ingredient[]>(
+    []
+  );
+
+  async function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value);
+  }
+
+  useEffect(() => {
+    if (!searchText) return;
+    async function fetchData() {
+      const response = await fetch(
+        `/api/ingredients?where=nameLIKE%${searchText}%&orderby=name&limit=4`
+      );
+      setSearchedIngredients(await response.json());
+    }
+    fetchData();
+  }, [searchText]);
 
   return (
     <>
@@ -92,6 +110,30 @@ export default function HomePage() {
                 </Form.Select>
               </Col>
             </Row>
+
+            <Col>
+              <Dropdown
+                show={searchText.length > 0 && searchedIngredients.length > 0}
+              >
+                <Dropdown.Toggle as="div" bsPrefix="p-0">
+                  <Form.Control
+                    type="text"
+                    value={searchText}
+                    placeholder="Search ingredient"
+                    aria-label="Search"
+                    onChange={handleSearch}
+                  />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu style={{ width: "100%" }}>
+                  {searchedIngredients.map((r, i) => (
+                    <Dropdown.Item key={i} className="fw-bold">
+                      <Form.Text className="text-wrap">{r.name}</Form.Text>
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
           </Form>
         </Card.Body>
       </Card>
