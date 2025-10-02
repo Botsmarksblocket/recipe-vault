@@ -1,5 +1,4 @@
 import { Row, Col, Form, Card, Button } from "react-bootstrap";
-// import { useAuth } from "../context/AuthProvider";
 import type Recipe from "../interfaces/Recipe";
 import type Ingredient from "../interfaces/Ingredient";
 import type MealType from "../interfaces/MealType";
@@ -14,7 +13,7 @@ EditRecipePage.route = {
   index: 3,
   loader: async ({ params }: { params: any }) => {
     const { id } = params!;
-    const mealType = await (await fetch(`/api/mealType`)).json();
+    const mealType = await (await fetch(`/api/mealTypes`)).json();
     const recipe = await (await fetch(`/api/recipes/${id}`)).json();
     const ingredients = await (
       await fetch(`/api/ingredients/?where=recipesId=${id}`)
