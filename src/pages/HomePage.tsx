@@ -59,26 +59,10 @@ export default function HomePage() {
     setSearch(event.target.value);
   }
 
-  // Returns an array of searched ingredients
-  useEffect(() => {
-    if (!searchText) return;
-    setSearchedIngredients([]);
-
-    async function fetchData() {
-      const response = await fetch(
-        `/api/ingredients?where=nameLIKE%${searchText}%&orderby=name&limit=4`
-      );
-      setSearchedIngredients(await response.json());
-    }
-    fetchData();
-  }, [searchText]);
-
   useEffect(() => {
     async function fetchIngredients() {
       const response = await fetch("/api/ingredients");
       const ingredients = await response.json();
-
-      console.log(ingredients);
 
       const seen = new Set<string>();
       const uniqueIngredients = ingredients.filter((ing: Ingredient) => {
@@ -93,13 +77,25 @@ export default function HomePage() {
     fetchIngredients();
   }, []);
 
+  useEffect(() => {
+    if (!searchText) return;
+    setSearchedIngredients([]);
+
+    async function fetchData() {
+      const response = await fetch(
+        `/api/ingredients?where=nameLIKE%${searchText}%&orderby=name&limit=4`
+      );
+      setSearchedIngredients(await response.json());
+    }
+    fetchData();
+  }, [searchText]);
+
   function handleIngredientClick(ingredient: Ingredient) {
     // Check if ingredient is already selected
     if (!selectedIngredients.some((ing) => ing.id === ingredient.id)) {
       setSelectedIngredients([...selectedIngredients, ingredient]);
     }
 
-    // Clear search after selection
     setSearch("");
     setSearchedIngredients([]);
   }
@@ -110,6 +106,7 @@ export default function HomePage() {
     );
   }
 
+  // Filter recipes based on selected ingredients
   const filteredRecipes = recipes
     .filter((r) => !selectedUser || r.createdBy === selectedUser)
     .filter((r) => !selectedMealType || r.mealTypeId === selectedMealType)
@@ -127,6 +124,12 @@ export default function HomePage() {
       );
     });
 
+  function clearFilters() {
+    setSelectedUser(null);
+    setSelectedMealType(null);
+    setSelectedIngredients([]);
+  }
+
   return (
     <>
       <Row>
@@ -136,12 +139,25 @@ export default function HomePage() {
       </Row>
 
       <Card className="mb-3 mt-3">
-        <Card.Title className="fs-3 ms-3 mt-2">Filter recipes</Card.Title>
+        <Card.Title className="fs-3 ms-3 mt-2 d-flex justify-content-between align-items-center">
+          <span>Filter recipes</span>
+          {(selectedUser ||
+            selectedMealType ||
+            selectedIngredients.length > 0) && (
+            <button
+              className="btn btn-outline-secondary btn-sm me-3"
+              onClick={clearFilters}
+            >
+              Clear all filters
+            </button>
+          )}
+        </Card.Title>{" "}
         <Card.Body>
           <Form>
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select
+                  value={selectedMealType ?? ""}
                   onChange={(e) =>
                     setSelectedMealType(
                       e.target.value === "" ? null : Number(e.target.value)
@@ -159,6 +175,7 @@ export default function HomePage() {
               </Col>
               <Col xs={6}>
                 <Form.Select
+                  value={selectedUser ?? ""}
                   onChange={(e) =>
                     setSelectedUser(
                       e.target.value === "" ? null : Number(e.target.value)
@@ -209,12 +226,12 @@ export default function HomePage() {
                   <Form.Label className="fw-bold">
                     Recipes which contains at least one of these ingredients:
                   </Form.Label>
-                  <div className="d-flex flex-wrap">
+                  <div className="d-flex flex-wrap ">
                     {selectedIngredients.map((ingredient) => (
                       <Badge
                         key={ingredient.id}
                         bg="primary"
-                        className="d-flex align-items-center gap-2 px-3 py-2"
+                        className="d-flex align-items-center gap-2 px-3 py-2 mx-1 mt-2 text-wrap fs-6"
                       >
                         {ingredient.name}
                         <span
