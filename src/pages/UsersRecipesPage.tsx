@@ -21,7 +21,7 @@ export default function UsersRecipesPage() {
   useEffect(() => {
     if (!user?.id) return;
 
-    fetch(`api/recipes/?where=createdBy=${user.id}`)
+    fetch(`/api/recipes/?where=createdBy=${user.id}`)
       .then((res) => res.json())
       .then((data) => setRecipes(data))
       .finally(() => setLoading(false));

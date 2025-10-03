@@ -1,4 +1,5 @@
 import { Navigate } from "react-router";
+import { Spinner } from "react-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import type { JSX } from "react";
 
@@ -10,7 +11,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return;
+    return <Spinner animation="border" role="status" />;
   }
 
   if (!user) {
