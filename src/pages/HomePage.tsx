@@ -2,7 +2,7 @@ import type Recipe from "../interfaces/Recipe";
 import type MealType from "../interfaces/MealType";
 import type Ingredient from "../interfaces/Ingredient";
 import RecipeCard from "../components/RecipeCard";
-import { Row, Col, Card, Form, Dropdown } from "react-bootstrap";
+import { Row, Col, Card, Form, Dropdown, Badge } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -36,24 +36,51 @@ export default function HomePage() {
     user: initialUser,
   } = useLoaderData<HomeLoaderData>();
 
-  const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
-  const [mealTypes, setMealTypes] = useState<MealType[]>(initialMealTypes);
-  const [users, setUsers] = useState<PublicUserNames[]>(initialUser);
+  const [recipes] = useState<Recipe[]>(initialRecipes);
+  const [mealTypes] = useState<MealType[]>(initialMealTypes);
+  const [users] = useState<PublicUserNames[]>(initialUser);
 
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<number | null>(null);
+
+  // Ingredients search
 
   const [searchText, setSearch] = useState("");
   const [searchedIngredients, setSearchedIngredients] = useState<Ingredient[]>(
     []
   );
+  const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
+    []
+  );
+
+  const [allIngredients, setAllIngredients] = useState<Ingredient[]>([]);
 
   async function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value);
   }
 
   useEffect(() => {
+    async function fetchIngredients() {
+      const response = await fetch("/api/ingredients");
+      const ingredients = await response.json();
+
+      const seen = new Set<string>();
+      const uniqueIngredients = ingredients.filter((ing: Ingredient) => {
+        const lower = ing.name.toLowerCase();
+        if (seen.has(lower)) return false;
+        seen.add(lower);
+        return true;
+      });
+
+      setAllIngredients(uniqueIngredients);
+    }
+    fetchIngredients();
+  }, []);
+
+  useEffect(() => {
     if (!searchText) return;
+    setSearchedIngredients([]);
+
     async function fetchData() {
       const response = await fetch(
         `/api/ingredients?where=nameLIKE%${searchText}%&orderby=name&limit=4`
@@ -62,6 +89,46 @@ export default function HomePage() {
     }
     fetchData();
   }, [searchText]);
+
+  function handleIngredientClick(ingredient: Ingredient) {
+    // Check if ingredient is already selected
+    if (!selectedIngredients.some((ing) => ing.id === ingredient.id)) {
+      setSelectedIngredients([...selectedIngredients, ingredient]);
+    }
+
+    setSearch("");
+    setSearchedIngredients([]);
+  }
+
+  function removeIngredient(ingredientId: number) {
+    setSelectedIngredients(
+      selectedIngredients.filter((ing) => ing.id !== ingredientId)
+    );
+  }
+
+  // Filter recipes based on selected ingredients
+  const filteredRecipes = recipes
+    .filter((r) => !selectedUser || r.createdBy === selectedUser)
+    .filter((r) => !selectedMealType || r.mealTypeId === selectedMealType)
+    .filter((recipe) => {
+      if (selectedIngredients.length === 0) return true;
+
+      // Get all ingredients that belong to this recipe
+      const recipeIngredients = allIngredients.filter(
+        (ing) => ing.recipesId === recipe.id
+      );
+
+      // Check if any selected ingredient is in this recipe
+      return selectedIngredients.some((selectedIng) =>
+        recipeIngredients.some((recipeIng) => recipeIng.id === selectedIng.id)
+      );
+    });
+
+  function clearFilters() {
+    setSelectedUser(null);
+    setSelectedMealType(null);
+    setSelectedIngredients([]);
+  }
 
   return (
     <>
@@ -72,12 +139,25 @@ export default function HomePage() {
       </Row>
 
       <Card className="mb-3 mt-3">
-        <Card.Title className="fs-3 ms-3 mt-2">Filter recipes</Card.Title>
+        <Card.Title className="fs-3 ms-3 mt-2 d-flex justify-content-between align-items-center">
+          <span>Filter recipes</span>
+          {(selectedUser ||
+            selectedMealType ||
+            selectedIngredients.length > 0) && (
+            <button
+              className="btn btn-outline-secondary btn-sm me-3"
+              onClick={clearFilters}
+            >
+              Clear all filters
+            </button>
+          )}
+        </Card.Title>{" "}
         <Card.Body>
           <Form>
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select
+                  value={selectedMealType ?? ""}
                   onChange={(e) =>
                     setSelectedMealType(
                       e.target.value === "" ? null : Number(e.target.value)
@@ -95,6 +175,7 @@ export default function HomePage() {
               </Col>
               <Col xs={6}>
                 <Form.Select
+                  value={selectedUser ?? ""}
                   onChange={(e) =>
                     setSelectedUser(
                       e.target.value === "" ? null : Number(e.target.value)
@@ -126,27 +207,56 @@ export default function HomePage() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu style={{ width: "100%" }}>
-                  {searchedIngredients.map((r, i) => (
-                    <Dropdown.Item key={i} className="fw-bold">
-                      <Form.Text className="text-wrap">{r.name}</Form.Text>
+                  {searchedIngredients.map((ingredient) => (
+                    <Dropdown.Item
+                      key={ingredient.id}
+                      className="fw-bold"
+                      onClick={() => handleIngredientClick(ingredient)}
+                    >
+                      <Form.Text className="text-wrap">
+                        {ingredient.name}
+                      </Form.Text>
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+
+              {selectedIngredients.length > 0 && (
+                <div className="mt-3">
+                  <Form.Label className="fw-bold">
+                    Recipes which contains at least one of these ingredients:
+                  </Form.Label>
+                  <div className="d-flex flex-wrap ">
+                    {selectedIngredients.map((ingredient) => (
+                      <Badge
+                        key={ingredient.id}
+                        bg="primary"
+                        className="d-flex align-items-center gap-2 px-3 py-2 mx-1 mt-2 text-wrap fs-6"
+                      >
+                        {ingredient.name}
+                        <span
+                          onClick={() => removeIngredient(ingredient.id)}
+                          style={{ cursor: "pointer", fontWeight: "bold" }}
+                          role="button"
+                          aria-label={`Remove ${ingredient.name}`}
+                        >
+                          ×
+                        </span>
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
             </Col>
           </Form>
         </Card.Body>
       </Card>
       <Row>
-        {recipes
-          .filter((r) => !selectedUser || r.createdBy === selectedUser)
-          .filter((r) => !selectedMealType || r.mealTypeId === selectedMealType)
-
-          .map((recipe) => (
-            <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
-              <RecipeCard recipe={recipe} />
-            </Col>
-          ))}
+        {filteredRecipes.map((recipe) => (
+          <Col xs={12} sm={6} md={4} lg={3} className="mb-3" key={recipe.id}>
+            <RecipeCard recipe={recipe} />
+          </Col>
+        ))}
       </Row>
     </>
   );
