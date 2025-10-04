@@ -19,7 +19,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
       to={`/recipe/${id}/${createSlug(recipeName)}`}
       style={{ textDecoration: "none" }}
     >
-      <Card role="button" className="h-100 w-100">
+      <Card role="button" className="h-100 w-100 recipe-card">
         <Card.Body>
           {imagePath && (
             <div className="card-image-wrapper">
