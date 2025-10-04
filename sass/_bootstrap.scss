@@ -21,7 +21,12 @@ $warning: #ffc107;
 
 #root {
   background-color: var(--bg-color);
+  background-color: var(--bg-color);
   color: var(--text-color);
+  background-image: var(--bg-image);
+  background-size: auto;
+  background-repeat: repeat;
+  background-attachment: fixed;
 }
 
 .navbar {
@@ -31,6 +36,8 @@ $warning: #ffc107;
   --bs-navbar-active-color: var(--text-color);
   --bs-navbar-brand-color: var(--text-color);
   --bs-navbar-brand-hover-color: var(--text-color);
+  border-bottom: 1px solid var(--seperator);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .navbar .nav-link:hover,
@@ -40,10 +47,12 @@ $warning: #ffc107;
 
 .app-footer {
   background-color: var(--footer-bg-color);
+  border-top: 1px solid var(--seperator);
 }
 
 .card {
   background-color: var(--card-bg-color) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .card-text,

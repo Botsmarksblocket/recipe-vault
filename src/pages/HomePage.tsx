@@ -132,12 +132,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Row>
-        <Col>
-          <h1 className="mx-sm-0 mt-xs-0 mt-3">Check out these recipes!</h1>
-        </Col>
-      </Row>
-
       <Card className="mb-3 mt-3">
         <Card.Title className="fs-3 ms-3 mt-2 d-flex justify-content-between align-items-center">
           <span>Filter recipes</span>
@@ -164,7 +158,7 @@ export default function HomePage() {
                     )
                   }
                 >
-                  <option value="">-- Meal type --</option>
+                  <option value="">Meal type</option>
 
                   {mealTypes.map((m) => (
                     <option key={m.id} value={m.id}>
@@ -182,7 +176,7 @@ export default function HomePage() {
                     )
                   }
                 >
-                  <option value="">-- Recipe creator --</option>
+                  <option value="">Recipe creator</option>
                   {users.map((u) => (
                     <option key={u.id} value={u.id}>
                       {u.firstName} {u.lastName}

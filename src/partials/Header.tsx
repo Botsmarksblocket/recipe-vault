@@ -53,7 +53,7 @@ export default function Header() {
   }, [searchText]);
 
   return (
-    <header>
+    <header className="mb-3">
       <Navbar expand="xxl" expanded={expanded} fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-2" as={Link} to="/">
