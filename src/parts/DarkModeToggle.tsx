@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Switch from "react-switch";
 
 export const DarkModeToggle = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   useEffect(() => {
     if (isDark) {
       document.documentElement.setAttribute("data-theme", "dark");
