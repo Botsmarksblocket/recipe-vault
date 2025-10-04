@@ -225,7 +225,7 @@ export default function HomePage() {
                       <Badge
                         key={ingredient.id}
                         bg="primary"
-                        className="d-flex align-items-center gap-2 px-3 py-2 mx-1 mt-2 text-wrap fs-6"
+                        className="d-flex align-items-center gap-2 px-3 mx-1 mt-1 text-wrap fs-6"
                       >
                         {ingredient.name}
                         <span

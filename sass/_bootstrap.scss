@@ -61,7 +61,7 @@ $warning: #ffc107;
 }
 
 .list-group-item {
-  background-color: var(--navbar-color) !important;
+  background-color: var(--list-group-color) !important;
   color: var(--text-color);
 }
 
@@ -99,6 +99,11 @@ $warning: #ffc107;
 
 .btn.btn-primary {
   background-color: var(--primary-btn-color);
+  color: var(--text-color);
+}
+
+.btn.btn-success {
+  background-color: var(--suceess-btn-color);
   color: var(--text-color);
 }
 
