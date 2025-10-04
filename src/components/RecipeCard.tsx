@@ -27,6 +27,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
               <Card.Img
                 src={`/backend/wwwroot/uploads/${imagePath}`}
                 alt={recipeName}
+                style={{
+                  height: "300px",
+                  width: "100%",
+                  objectFit: "cover",
+                }}
               />
             </div>
           )}

@@ -107,6 +107,11 @@ export default function Header() {
                             <Image
                               className="image-search"
                               src={`/backend/wwwroot/uploads/${r.imagePath}`}
+                              style={{
+                                width: "60px",
+                                height: "60px",
+                                objectFit: "contain",
+                              }}
                             />
                           </Col>
                           <Col className="align-self-center">
