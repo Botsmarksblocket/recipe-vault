@@ -44,7 +44,6 @@ export default function HomePage() {
   const [selectedMealType, setSelectedMealType] = useState<number | null>(null);
 
   // Ingredients search
-
   const [searchText, setSearch] = useState("");
   const [searchedIngredients, setSearchedIngredients] = useState<Ingredient[]>(
     []
@@ -64,15 +63,7 @@ export default function HomePage() {
       const response = await fetch("/api/ingredients");
       const ingredients = await response.json();
 
-      const seen = new Set<string>();
-      const uniqueIngredients = ingredients.filter((ing: Ingredient) => {
-        const lower = ing.name.toLowerCase();
-        if (seen.has(lower)) return false;
-        seen.add(lower);
-        return true;
-      });
-
-      setAllIngredients(uniqueIngredients);
+      setAllIngredients(ingredients);
     }
     fetchIngredients();
   }, []);
@@ -81,13 +72,20 @@ export default function HomePage() {
     if (!searchText) return;
     setSearchedIngredients([]);
 
-    async function fetchData() {
-      const response = await fetch(
-        `/api/ingredients?where=nameLIKE%${searchText}%&orderby=name&limit=4`
-      );
-      setSearchedIngredients(await response.json());
-    }
-    fetchData();
+    // Gets all ingredients whose names contain the searched text
+    const searchedIngredients = allIngredients.filter((ing) =>
+      ing.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    // Only grab ingredients with unique name
+    const uniqueIngredients = Array.from(
+      new Map(searchedIngredients.map((ing) => [ing.name, ing])).values()
+    );
+
+    // Limit to four ingredients
+    const limitedIngredients = uniqueIngredients.slice(0, 4);
+
+    setSearchedIngredients(limitedIngredients);
   }, [searchText]);
 
   function handleIngredientClick(ingredient: Ingredient) {
@@ -106,21 +104,20 @@ export default function HomePage() {
     );
   }
 
-  // Filter recipes based on selected ingredients
+  // Filter recipes
   const filteredRecipes = recipes
     .filter((r) => !selectedUser || r.createdBy === selectedUser)
     .filter((r) => !selectedMealType || r.mealTypeId === selectedMealType)
     .filter((recipe) => {
       if (selectedIngredients.length === 0) return true;
 
-      // Get all ingredients that belong to this recipe
-      const recipeIngredients = allIngredients.filter(
-        (ing) => ing.recipesId === recipe.id
-      );
-
       // Check if any selected ingredient is in this recipe
       return selectedIngredients.some((selectedIng) =>
-        recipeIngredients.some((recipeIng) => recipeIng.id === selectedIng.id)
+        allIngredients.some(
+          (ing) =>
+            ing.recipesId === recipe.id &&
+            ing.name.toLowerCase() === selectedIng.name.toLowerCase()
+        )
       );
     });
 
@@ -147,7 +144,7 @@ export default function HomePage() {
           )}
         </Card.Title>{" "}
         <Card.Body>
-          <Form>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <Row className="d-flex justify-content-center mb-3">
               <Col xs={6}>
                 <Form.Select
