@@ -271,7 +271,7 @@ export default function EditRecipePage() {
                     <Button
                       variant="primary"
                       onClick={() => dispatch({ type: "add" })}
-                      className="mt-2 mb-2"
+                      className="mt-2 mb-2 fw-bold"
                     >
                       + Add Ingredient
                     </Button>
@@ -330,7 +330,7 @@ export default function EditRecipePage() {
                     <Button
                       type="submit"
                       variant="success"
-                      className="fs-4 w-100"
+                      className="fs-5 fw-bold w-100"
                     >
                       Update recipe
                     </Button>

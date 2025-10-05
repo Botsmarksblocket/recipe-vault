@@ -47,11 +47,15 @@ export default function RecipePage() {
 
                 <Col xs={12} md={6}>
                   {imagePath && (
-                    <div className="mt-3 mt-md-0">
+                    <div className="mt-3 mt-md-0 ms-auto">
                       {/* TODO Update src for production */}
                       <Card.Img
                         src={`/backend/wwwroot/uploads/${imagePath}`}
                         alt="Recipe image"
+                        style={{
+                          maxHeight: "600px",
+                          objectFit: "cover",
+                        }}
                       />
                     </div>
                   )}

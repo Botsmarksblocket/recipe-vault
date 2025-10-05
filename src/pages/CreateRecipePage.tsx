@@ -214,7 +214,7 @@ export default function CreateRecipePage() {
                     <Button
                       variant="primary"
                       onClick={addIngredientRow}
-                      className="mt-2 mb-2"
+                      className="mt-2 mb-2 fw-bold"
                     >
                       + Add Ingredient
                     </Button>
@@ -276,7 +276,11 @@ export default function CreateRecipePage() {
                   />
                 </Form.Group>
                 <div className="d-grid gap-2">
-                  <Button type="submit" variant="success" className="fs-4 ">
+                  <Button
+                    type="submit"
+                    variant="success"
+                    className="fs-4 fw-bold"
+                  >
                     Create recipe!
                   </Button>
                 </div>

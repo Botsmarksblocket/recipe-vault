@@ -53,7 +53,7 @@ export default function Header() {
   }, [searchText]);
 
   return (
-    <header>
+    <header className="mb-3">
       <Navbar expand="xxl" expanded={expanded} fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-2" as={Link} to="/">
@@ -107,6 +107,11 @@ export default function Header() {
                             <Image
                               className="image-search"
                               src={`/backend/wwwroot/uploads/${r.imagePath}`}
+                              style={{
+                                width: "60px",
+                                height: "60px",
+                                objectFit: "contain",
+                              }}
                             />
                           </Col>
                           <Col className="align-self-center">

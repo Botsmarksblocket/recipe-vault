@@ -19,7 +19,11 @@ export default function ConfirmModal({ onConfirm }: ConfirmModalProps) {
 
   return (
     <>
-      <Button variant="danger" className="w-100 fs-4" onClick={handleShow}>
+      <Button
+        variant="danger"
+        className="w-100 fs-5 fw-bold"
+        onClick={handleShow}
+      >
         Delete recipe
       </Button>
 
