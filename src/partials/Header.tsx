@@ -54,7 +54,7 @@ export default function Header() {
 
   return (
     <header className="mb-3">
-      <Navbar expand="xxl" expanded={expanded} fixed="top">
+      <Navbar expand="xl" expanded={expanded} fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-2" as={Link} to="/">
             Recipe vault
@@ -79,7 +79,7 @@ export default function Header() {
                 ))}
             </Nav>
 
-            <Form className=" mx-xxl-auto header-search-bar">
+            <Form className=" mx-xl-auto header-search-bar">
               <Dropdown
                 show={searchText.length > 0 && searchedRecipes.length > 0}
               >
@@ -128,12 +128,12 @@ export default function Header() {
             </Form>
 
             {user && (
-              <h3 className="ms-2 me-4 d-none d-lg-block">
+              <h3 className="ms-2 me-4 d-none d-xl-block">
                 Welcome {user?.firstName}
               </h3>
             )}
 
-            <div className="mt-2 mt-lg-0">
+            <div className="mt-2 mt-lg-2">
               <DarkModeToggle />
               {user ? (
                 <Button

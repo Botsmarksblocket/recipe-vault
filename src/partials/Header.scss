@@ -1,8 +1,11 @@
 .header-search-bar {
   width: 100%;
 
-  @media (min-width: 1400px) {
-    width: 440px;
+  @media (min-width: 1200px) {
+    width: 200px;
+  }
+  @media (min-width: 1480px) {
+    width: 500px;
   }
 }
 
